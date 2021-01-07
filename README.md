@@ -7,4 +7,8 @@ Este trabalho propõe uma abordagem que emprega métodos e/ou técnicas de detec
 </p>
 
 ## OBJETIVOS 
+<p align="justify">
+Desenvolver um software de baixo custo para detectar e reconhecer objetos em imagens digitais para realizar a contagem e o cálculo volumétrico de ovos da espécie de camarão.
+</p>  
+
 ## REQUISITOS FUNCIONAIS

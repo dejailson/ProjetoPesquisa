@@ -12,3 +12,8 @@ Desenvolver um software de baixo custo para detectar e reconhecer objetos em ima
 </p>  
 
 ## REQUISITOS FUNCIONAIS
+- [X] Determinar o estágio de desenvolvimento embrionário dos ovos
+- [X] Realizar o cálculo da média de fecundidade
+- [X] Realizar o cálculo do volume dos ovos
+- [X] Realizar o cálculo do volume da massa de ovos
+- [X] Realizar a contagem de ovos presente nas imagens

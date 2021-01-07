@@ -5,5 +5,6 @@ A aplicação de métodos manuais para coleta dos dados em algumas situações n
 A introdução de métodos e procedimentos de processamento de imagens digitais possibilitou o desenvolvimento de aplicações que automatizou tarefas repetitivas, nas quais é necessário utilizar o sentido da visão para extrair dados de objeto contidos em imagens digitais.Este grupo de aplicação permite o surgimento de um novo campo na informática para o desenvolvimento de software que é a visão computacional. Podemos conceituar visão computacional como um processo de modelagem e replicação da visão humana utilizando recursos de software e hardware com o objetivo de reconstruir as propriedades, como a forma, a iluminação e a distribuição de cores, e detecção de objetos 
 Este trabalho propõe uma abordagem que emprega métodos e/ou técnicas de detecção de objetos e processamento de imagens digitais para realizar a coleta de dados. A utilização destes métodos permitirá o desenvolvimento de uma aplicação de software que automatize a etapa de coleta dos dados brutos do projeto entitulado “Fecundidade do camarão de água doce Pitu, Macrobrachium carcinus (Linnaeus, 1758)” do curso de meio ambiente.
 </p>
+
 ## OBJETIVOS 
 ## REQUISITOS FUNCIONAIS

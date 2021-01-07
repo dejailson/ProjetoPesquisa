@@ -6,7 +6,7 @@ A introdução de métodos e procedimentos de processamento de imagens digitais 
 Este trabalho propõe uma abordagem que emprega métodos e/ou técnicas de detecção de objetos e processamento de imagens digitais para realizar a coleta de dados. A utilização destes métodos permitirá o desenvolvimento de uma aplicação de software que automatize a etapa de coleta dos dados brutos do projeto entitulado “Fecundidade do camarão de água doce Pitu, Macrobrachium carcinus (Linnaeus, 1758)” do curso de meio ambiente.
 </p>
 
-## OBJETIVOS 
+## OBJETIVO
 <p align="justify">
 Desenvolver um software de baixo custo para detectar e reconhecer objetos em imagens digitais para realizar a contagem e o cálculo volumétrico de ovos da espécie de camarão.
 </p>  

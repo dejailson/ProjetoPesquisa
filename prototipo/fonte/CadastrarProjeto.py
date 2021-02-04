@@ -1,8 +1,9 @@
 import tkinter as t
 from tkinter import ttk
 from binario import Dados as dd
-from time import sleep
 
+global d_membros
+d_membros = []
 class cadastrarProjeto:
     def __init__(self):
         self.root = t.Tk()
@@ -58,15 +59,10 @@ class cadastrarProjeto:
         self.tree.column("coluna5", width=100, minwidth=50)
         self.tree.heading('#5', text='Ações')
 
-        self.visu()
-        self.lista = ['1', 'Rhuã Yuri', 'Bolsista', 'Não']#Para substituir
-        
-        self.tree.insert("", 'end',values=self.lista, tag='1')
-        self.lista = ['2', 'Dejailson', 'Orientador', 'Sim']#Para substitur
-        
-        self.tree.insert("", 'end',values=self.lista, tag='1')
-
         self.tree.place(x=15, y=300, height = 115, width=670)
+
+        self.cancelarP = t.Button(self.root, text='Cancelar', font='arial 10 bold', command=lambda:self.mudarTela()).place(x=20, y=450)
+        self.salvarP = t.Button(self.root, text='Salvar', font='arial 10 bold', command=lambda:self.salvar()).place(x=620, y=450)
         self.root.mainloop()
 
 
@@ -99,37 +95,42 @@ class cadastrarProjeto:
         self.butao1 = t.Button(self.tela, text="Salvar", font='arial 12 bold', command=self.adicionar)#Implementação incompleta
         self.butao1.place(x=100, y=180)
 
-        self.butao2 = t.Button(self.tela, text="Cancelar", font='arial 12 bold', command=self.cancelar)#Falta implementar
+        self.butao2 = t.Button(self.tela, text="Cancelar", font='arial 12 bold', command=lambda: self.cancelar(self.tela))#Falta implementar
         self.butao2.place(x=200, y=180)
         self.tela.mainloop()
 
     def mudarTela(self):
-        pass
-    '''self.lista = [self.cont[0], self.Nome.get(), self.Data.get(),self.Descricao, [None] '''
+        self.root.destroy()
+        from transicao import Transicao as T
+        T(n=1)
 
+    def salvar(self):
+        self.final = [self.Nome.get().rstrip().lstrip(), self.Data.get().rstrip().lstrip(), self.Descricao.get(1.0, t.END).rstrip().lstrip(), d_membros[:]]
+        self.dados = dd()
+        try:
+            
+            self.dados.gravarBin(self.final)
+            
+        except:
+            self.dados.salvarBin(self.final)
+        self.mudarTela()
 
     def adicionar(self):
         self.dados = dd()
         self.contador = self.dados.lerBin()
         if not self.contador == None:
-            self.cont = self.contador[0][0]
+            self.cont = 0
             self.cont += 1
         else:
             self.cont = 1
-        self.lista = [self.cont, self.pesquisador.get(), self.membro.get(), self.coordenador.get()]
-        self.dados.gravarBin(self.lista)
-        self.msg = t.Label(self.tela, text='Tarefa concluída', font='Arial 16 bold').place(x=12, y=230)
+        d_membros.append([self.cont, self.pesquisador.get().rstrip().lstrip(), self.membro.get().rstrip().lstrip(), self.coordenador.get().rstrip().lstrip()])
         self.tela.destroy()
-        self.root.destroy()
-        self.root = cadastrarProjeto()
+        self.tree.insert("", 'end',values=d_membros[-1], tag='1')
         #Problemas caso o usuário feche a página sem apertar no botão cancelar ou salvar (pensei em colocar em um arquivo temporário, mas caso o programa seja encerrado de forma errônea os dados não vão ser apagados.)
 
-    def cancelar(self):
-        self.tela.destroy()
+    def cancelar(self, tela):
+        tela.destroy()
 
     def visu(self):
         dados = dd()
         return dados.lerBin()
-
-
-

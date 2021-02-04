@@ -1,6 +1,10 @@
 import tkinter as t
 from tkinter import ttk
+from cadastrarAmostra import CadastrarAmostra as CA
+from binario import Dados as dd
 
+global listaG
+listaG = []
 class Amostras:
     def __init__(self):
         self.root = t.Tk()
@@ -23,19 +27,12 @@ class Amostras:
         self.msg3 = t.Label(self.root, text='Projeto', font='arial 14 bold')
         self.msg3.place(x=12, y=150)
 
-        self.lista = [
-                        "Projeto 1", 
-                        "Projeto 2",
-                        "Projeto 3",
-                        "Projeto 4"]
-        self.projeto = ttk.Combobox(self.root, values=self.lista, width=62)
-        self.projeto.place(x=160, y=150, height=30)
-        self.projeto.current(0)
+        self.visu(numero=1)
 
 
         self.botao_pesquisar = t.Button(self.root, text=' Pesquisar ', font='arial 12 bold').place(x=570, y=149)#sem ação
 
-        self.botao_adicionar = t.Button(self.root, text='+ Incluir Novo', font='arial 10 bold').place(x=580, y=265)#sem ação
+        self.botao_adicionar = t.Button(self.root, text='+ Incluir Novo', font='arial 10 bold', command=lambda:self.mudarTela()).place(x=580, y=265)#sem ação
 
         self.tree = ttk.Treeview(self.root, selectmode="browse", column=("coluna1", "coluna2", "coluna3", "coluna4", "coluna5"), show="headings")
 
@@ -54,18 +51,55 @@ class Amostras:
         self.tree.column("coluna5", width=100, minwidth=50)
         self.tree.heading('#5', text='Ações')
 
-        self.lista = ['1', 'Projeto I', 'ITA-09211', 'Dejailson', 'nada']#Colocar em uma função posteriormente
-        for c in range(0, 3):
-            self.tree.insert("", 'end',values=self.lista, tag='1')
+        self.visu()
 
         self.tree.place(x=15, y=300, height = 115, width=670)
 
-        self.button2 = t.Button(self.root, text='Salvar').place(x=570, y=450, width=100)
+        self.button2 = t.Button(self.root, text='Voltar', command=lambda:self.voltar()).place(x=570, y=450, width=100)
 
         self.root.mainloop()
 
-    def visu(self):
-        pass
+    def voltar(self):
+        self.root.destroy()
+        from transicao import Transicao as T
+        T(n=6)
+
+    def visu(self, numero=None):
+        self.dados1 = dd(NomeArquivo='Amostras_Projeto.dat')
+        self.dados2 = dd()
+        self.informacoes1 = self.dados1.lerBin()
+        self.informacoes2 = self.dados2.lerBin()
+        self.lista = []
+        if not numero == None:
+            if not self.informacoes1 == None:
+                for c in self.informacoes1[:]:
+                    self.lista.append(c[0])
+            else:
+                self.lista.append('Sem Projetos Cadastrado')
+
+            self.projeto = ttk.Combobox(self.root, values=self.lista, width=62)
+            self.projeto.place(x=160, y=150, height=30)
+            self.projeto.current(0)     
+        else:
+            self.cont = 1
+            for c in self.informacoes1:
+                self.lista = [self.cont, c[0], c[1]]
+                for x in self.informacoes2:
+                    if c[0] == x[:][0]:
+                        for d in x[3]:
+                            if 'Sim' in d[:]:
+                                self.lista.append(d[1])
+                                self.tree.insert("", 'end',values=self.lista, tag='1')
+                                break
+                        break
+                self.cont += 1
+
+    def mudarTela(self):
+        self.root.destroy()
+        CA()
+
+
+
 
 
 

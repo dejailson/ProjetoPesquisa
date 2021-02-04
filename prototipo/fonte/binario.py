@@ -3,9 +3,9 @@ import os
 import pickle
 
 class Dados:
-    def __init__(self):
+    def __init__(self, NomeArquivo='Projetos.dat'):
         self.nomePasta = 'Dados_do_Projeto'
-        self.NomeArquivo = 'Projetos.dat'
+        self.NomeArquivo = NomeArquivo
     
     def criar_Pasta(self):
         if not os.path.isdir(self.nomePasta):
@@ -48,6 +48,7 @@ class Dados:
             self.lista = []
         self.lista.append(conteudo)
         self.salvarBin(self.lista)
+
 
 
 

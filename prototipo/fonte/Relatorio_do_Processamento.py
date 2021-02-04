@@ -69,9 +69,14 @@ class Relatorio():
         
         
 
-        self.sair = t.Button(self.root, text='Sair').place(x=860, y=400, width=100, relwidth=0.01)#sem ação
+        self.sair = t.Button(self.root, text='Sair', command=lambda:self.voltar()).place(x=860, y=400, width=100, relwidth=0.01)#sem ação
 
         self.root.mainloop()
+
+    def voltar(self):
+        self.root.destroy()
+        from transicao import Transicao as T
+        T(n=4)
 
     def estagios(self):
         #Definir função para o processamento de imagem

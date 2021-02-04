@@ -36,7 +36,7 @@ class Projeto():
 
         self.botao_pesquisar = t.Button(self.root, text=' Pesquisar ', font='arial 12 bold').place(x=540, y=150)#sem ação
 
-        self.botao_adicionar = t.Button(self.root, text='+ Incluir Novo', font='arial 10 bold', command=lambda : CP()).place(x=580, y=265)#sem ação
+        self.botao_adicionar = t.Button(self.root, text='+ Incluir Novo', font='arial 10 bold', command=lambda : self.chamar()).place(x=580, y=265)#sem ação
 
         self.tree = ttk.Treeview(self.root, selectmode="browse", column=("coluna1", "coluna2", "coluna3", "coluna4", "coluna5"), show="headings")
 
@@ -55,25 +55,40 @@ class Projeto():
         self.tree.column("coluna5", width=100, minwidth=50)
         self.tree.heading('#5', text='Ações')
 
-        self.lista = self.visu()#Colocar em um função posteriormente
-        if not self.lista == None:
-            for c in self.lista:
-                self.tree.insert("", 'end',values=c, tag='1')
+        self.visu()#Colocar em um função posteriormente
 
         self.tree.place(x=15, y=300, height = 115, width=670)
 
-        self.button2 = t.Button(self.root, text='Voltar').place(x=570, y=450, width=100)
+        self.button2 = t.Button(self.root, text='Voltar', command=lambda:self.voltar()).place(x=570, y=450, width=100)
 
         self.root.mainloop()
+    
+    def voltar(self):
+        self.root.destroy()
+        from transicao import Transicao as T
+        T(n=6)
 
-    def visu(self):
+    def chamar(self):
+        self.root.destroy()
+        CP()
+
+    def visu(self, num=None):
         self.dados = dd()
-        return self.dados.lerBin()
+        self.informacoes = self.dados.lerBin()
+        self.cont = 1
+        try:
+            for c in self.informacoes:
+                self.lista = [self.cont, c[0], c[1]]
+                for d in c[3][:]:
+                    if d[3] in 'Sim':
+                        self.lista.append(d[1])
+                        self.tree.insert("", 'end',values=self.lista, tag='1')
+                        break
+                self.cont += 1
+        except:
+            self.tree.insert("", 'end',values=[], tag='1')
+                
 
 
-
-
-
-Projeto()
 
 

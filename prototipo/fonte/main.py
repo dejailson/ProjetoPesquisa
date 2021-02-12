@@ -3,6 +3,19 @@ from Amostras import Amostras
 import tkinter as t
 from PIL import ImageTk,Image
 
+import os
+def buscarCaminho(nome):
+    dirlist = os.getcwd()
+    if '\\' in dirlist:
+        dirlist = dirlist + '\\prototipo\\fonte\\' + nome
+    else:
+        dirlist = dirlist + '/prototipo/fonte/' + nome
+    print(type(dirlist))
+
+    print(dirlist)
+    return dirlist
+
+
 class Main:
     def __init__(self):
         self.root = t.Tk()
@@ -18,7 +31,8 @@ class Main:
         self.root.config(menu=self.Menu)
         self.titulo = t.Label(self.root, text='Software De Visão Computacional', font='Arial 20 bold').pack()
         self.nada = t.Label(self.root, text='   ', font='arial 20').pack()
-        self.img = ImageTk.PhotoImage(Image.open("C:\\Users\\rhuan\\Desktop\\arquivos_da_bolsa\\Projeto\\python\\projeto_pesquisa01\\files\\Prototipos_Projeto\\ovos.jpg"))
+        self.nome_img = buscarCaminho('ovos.jpg')
+        self.img = ImageTk.PhotoImage(Image.open(self.nome_img))
         self.ima_l = t.Label(imag=self.img, width=700, height=400).pack()
         
         self.root.mainloop()
@@ -29,6 +43,4 @@ class Main:
     def Amo(self):
         self.root.destroy()
         Amostras()
-
-
 Main()

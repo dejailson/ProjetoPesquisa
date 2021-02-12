@@ -2,6 +2,15 @@ import tkinter as t
 from tkinter import ttk
 from CadastrarProjeto import cadastrarProjeto as CP
 from binario import Dados as dd
+from PIL import ImageTk,Image
+import os
+def buscarCaminho(nome):
+    dirlist = os.getcwd()
+    if '\\' in dirlist:
+        dirlist = dirlist + '\\prototipo\\fonte\\' + nome
+    else:
+        dirlist = dirlist + '/prototipo/fonte/' + nome
+    return dirlist
 
 class Projeto():
     def __init__(self):
@@ -38,7 +47,7 @@ class Projeto():
 
         self.botao_adicionar = t.Button(self.root, text='+ Incluir Novo', font='arial 10 bold', command=lambda : self.chamar()).place(x=580, y=265)#sem ação
 
-        self.tree = ttk.Treeview(self.root, selectmode="browse", column=("coluna1", "coluna2", "coluna3", "coluna4", "coluna5"), show="headings")
+        self.tree = ttk.Treeview(self.root, selectmode="browse", column=("coluna1", "coluna2", "coluna3", "coluna4"), show="headings")
 
         self.tree.column("coluna1", width=50, minwidth=50)
         self.tree.heading('#1', text=' ')
@@ -52,16 +61,33 @@ class Projeto():
         self.tree.column("coluna4", width=100, minwidth=50)
         self.tree.heading('#4', text='Coordenador')
 
-        self.tree.column("coluna5", width=100, minwidth=50)
-        self.tree.heading('#5', text='Ações')
-
         self.visu()#Colocar em um função posteriormente
 
-        self.tree.place(x=15, y=300, height = 115, width=670)
+        self.tree.place(x=15, y=300, height = 115, width=540)
 
         self.button2 = t.Button(self.root, text='Voltar', command=lambda:self.voltar()).place(x=570, y=450, width=100)
 
+        self.caminho_lapis = buscarCaminho('lapis.jpg')
+        self.img_lapis = Image.open(self.caminho_lapis)
+        self.resu = self.red(self.img_lapis)
+        self.imagem_lapis = ImageTk.PhotoImage(self.resu)
+        self.imagem_lapis_L = t.Label(image=self.imagem_lapis).place(x=580, y=300)
+
+        self.caminho_olhos = buscarCaminho('olho.jpg')
+        self.img_olhos = Image.open(self.caminho_olhos)
+        self.resu = self.red(self.img_olhos)
+        self.imagem_olhos = ImageTk.PhotoImage(self.resu)
+        self.imagem_olhos_L = t.Label(image=self.imagem_olhos).place(x=640, y=300)
+
+
         self.root.mainloop()
+
+    def red(self, imge):
+        self.basewidth = 30
+        self.wpercent = (self.basewidth/float(imge.size[0]))
+        self.hsize = int((float(imge.size[1])*float(self.wpercent)))
+        imge = imge.resize((self.basewidth,self.hsize), Image.ANTIALIAS)
+        return imge
     
     def voltar(self):
         self.root.destroy()
@@ -89,6 +115,6 @@ class Projeto():
             self.tree.insert("", 'end',values=[], tag='1')
                 
 
-
+Projeto()
 
 

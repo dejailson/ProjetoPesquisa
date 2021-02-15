@@ -7,9 +7,9 @@ import os
 def buscarCaminho(nome):
     dirlist = os.getcwd()
     if '\\' in dirlist:
-        dirlist = dirlist + '\\prototipo\\fonte\\' + nome
+        dirlist = dirlist + '\\Prototipos_Projeto\\' + nome
     else:
-        dirlist = dirlist + '/prototipo/fonte/' + nome
+        dirlist = dirlist + '/Prototipos_Projeto/' + nome
     print(type(dirlist))
 
     print(dirlist)

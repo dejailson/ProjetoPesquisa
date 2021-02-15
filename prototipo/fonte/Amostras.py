@@ -2,6 +2,18 @@ import tkinter as t
 from tkinter import ttk
 from cadastrarAmostra import CadastrarAmostra as CA
 from binario import Dados as dd
+from PIL import ImageTk,Image
+import os
+def buscarCaminho(nome):
+    dirlist = os.getcwd()
+    if '\\' in dirlist:
+        dirlist = dirlist + '\\Prototipos_Projeto\\' + nome
+    else:
+        dirlist = dirlist + '/Prototipos_Projeto/' + nome
+    print(type(dirlist))
+
+    print(dirlist)
+    return dirlist
 
 global listaG
 listaG = []
@@ -53,11 +65,36 @@ class Amostras:
 
         self.visu()
 
-        self.tree.place(x=15, y=300, height = 115, width=670)
+        self.tree.place(x=15, y=300, height = 115, width=540)
+
+        self.caminho_lapis = buscarCaminho('lapis.jpg')
+        self.img_lapis = Image.open(self.caminho_lapis)
+        self.resu = self.red(self.img_lapis)
+        self.imagem_lapis = ImageTk.PhotoImage(self.resu)
+        self.imagem_lapis_L = t.Button(image=self.imagem_lapis).place(x=570, y=315)
+
+        self.caminho_olhos = buscarCaminho('olho.jpg')
+        self.img_olhos = Image.open(self.caminho_olhos)
+        self.resu = self.red(self.img_olhos)
+        self.imagem_olhos = ImageTk.PhotoImage(self.resu)
+        self.imagem_olhos_L = t.Button(image=self.imagem_olhos).place(x=610, y=315)
+
+        self.caminho_lixeira = buscarCaminho('lexeira.png')
+        self.img_lixeira = Image.open(self.caminho_lixeira)
+        self.resu = self.red(self.img_lixeira)
+        self.imagem_lixeira = ImageTk.PhotoImage(self.resu)
+        self.imagem_lixeira_L = t.Button(image=self.imagem_lixeira).place(x=650, y=315)
 
         self.button2 = t.Button(self.root, text='Voltar', command=lambda:self.voltar()).place(x=570, y=450, width=100)
 
         self.root.mainloop()
+
+    def red(self, imge):
+        self.basewidth = 25
+        self.wpercent = (self.basewidth/float(imge.size[0]))
+        self.hsize = int((float(imge.size[1])*float(self.wpercent)))
+        imge = imge.resize((self.basewidth,self.hsize), Image.ANTIALIAS)
+        return imge
 
     def voltar(self):
         self.root.destroy()
@@ -97,7 +134,6 @@ class Amostras:
     def mudarTela(self):
         self.root.destroy()
         CA()
-
 
 
 

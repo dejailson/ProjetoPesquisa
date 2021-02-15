@@ -7,9 +7,9 @@ import os
 def buscarCaminho(nome):
     dirlist = os.getcwd()
     if '\\' in dirlist:
-        dirlist = dirlist + '\\Prototipos_Projeto\\' + nome
+        dirlist = dirlist + '\\prototipo\\fonte\\' + nome
     else:
-        dirlist = dirlist + '/Prototipos_Projeto/' + nome
+        dirlist = dirlist + '/prototipo/fonte/' + nome
     return dirlist
 
 class Projeto():
@@ -71,7 +71,7 @@ class Projeto():
         self.img_lapis = Image.open(self.caminho_lapis)
         self.resu = self.red(self.img_lapis)
         self.imagem_lapis = ImageTk.PhotoImage(self.resu)
-        self.imagem_lapis_L = t.Button(image=self.imagem_lapis).place(x=570, y=315)
+        self.imagem_lapis_L = t.Button(image=self.imagem_lapis, command=lambda: sel()).place(x=570, y=315)
 
         self.caminho_olhos = buscarCaminho('olho.jpg')
         self.img_olhos = Image.open(self.caminho_olhos)
@@ -86,6 +86,7 @@ class Projeto():
         self.imagem_lixeira_L = t.Button(image=self.imagem_lixeira).place(x=650, y=315)
 
         self.root.mainloop()
+
 
     def red(self, imge):
         self.basewidth = 25

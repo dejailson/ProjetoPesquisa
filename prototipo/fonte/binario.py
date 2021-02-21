@@ -49,6 +49,14 @@ class Dados:
         self.lista.append(conteudo)
         self.salvarBin(self.lista)
 
+    def buscarCaminho(self, nome):
+        dirlist = os.getcwd()
+        if '\\' in dirlist:
+            dirlist = dirlist + '\\prototipo\\fonte\\' + nome
+        else:
+            dirlist = dirlist + '/prototipo/fonte/' + nome
+        return dirlist
+
 
 
 

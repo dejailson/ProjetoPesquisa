@@ -1,0 +1,8 @@
+PASTA_RECURSO = 'recurso'
+PASTA_IMAGEM = 'imagem'
+SUBPASTA_ICONE = 'icone'
+SUBPASTA_FUNDO = 'fundo'
+ICONE_LAPIS = 'lapis.jpg'
+ICONE_OLHO = 'olho.jpg'
+ICONE_LIXEIRA = 'lixeira.jpeg'
+IMAGEM_FUNDO = 'ovos.jpg'

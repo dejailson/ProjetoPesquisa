@@ -3,7 +3,7 @@ import config.Parametro as param
 
 
 class GerenciadorRecurso:
-    DIRETORIO_RECURSO = os.path.realpath('..')
+    DIRETORIO_RAIZ = os.path.realpath('..')
 
     def __init__(self):
         pass
@@ -25,5 +25,5 @@ class GerenciadorRecurso:
         return self.montarCaminhoRecurso(imagem_fundo)
 
     def montarCaminhoRecurso(self, nomeRecurso):
-        return os.path.join(self.DIRETORIO_RECURSO, param.PASTA_RECURSO,
+        return os.path.join(self.DIRETORIO_RAIZ, param.PASTA_RECURSO,
                             param.PASTA_IMAGEM, nomeRecurso)

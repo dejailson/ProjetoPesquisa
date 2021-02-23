@@ -3,8 +3,9 @@ import tkinter as t
 from tela.Projeto import Projeto
 from tela.Amostras import Amostras
 from util.binario import Dados as dd
-from PIL import ImageTk,Image
+from PIL import ImageTk, Image
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
+
 
 class TelaPrincipal():
     def __init__(self):

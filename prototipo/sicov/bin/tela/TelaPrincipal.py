@@ -5,7 +5,7 @@ from tela.Amostras import Amostras
 from util.binario import Dados as dd
 from PIL import ImageTk, Image
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
-
+import config.Parametro as param
 
 class TelaPrincipal():
     def __init__(self):
@@ -23,8 +23,8 @@ class TelaPrincipal():
         self.Menu.add_cascade(label='Informações', menu=self.menu)
         self.root.config(menu=self.Menu)
         self.titulo = t.Label(
-            self.root, text='Software De Visão Computacional', font='Arial 20 bold').pack()
-        self.nada = t.Label(self.root, text='   ', font='arial 20').pack()
+            self.root, text='Software De Visão Computacional', font=param.FONTE_TITULO).pack()
+        self.nada = t.Label(self.root, text='   ', font=param.FONTE_TITULO).pack()
         self.binario = dd()
         self.recurso = gr()
         self.nome_img = self.recurso.carregarImagemFundo()

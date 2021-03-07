@@ -1,19 +1,24 @@
 import tkinter as t
 from tkinter import ttk
 from util.binario import Dados as dd
+from PIL import Image, ImageTk
+from util.GerenciadorRecurso import GerenciadorRecurso as gr
+from processamento.aquisicao_img import Aquisicao
+from util.GerenciadorRecurso import GerenciadorRecurso as gr
 
 
 class Relatorio():
-    def __init__(self):
+    def __init__(self, url):
+        self.url = url
+        print(self.url)
         self.root = t.Tk()
         self.root.geometry("1000x450")
         self.root.title('Relatório do Processamento')
-        self.imagem = dd()
-        self.image = t.PhotoImage(
-            file="C:\\Users\\rhuan\\Desktop\\arquivos_da_bolsa\\Projeto\\python\\projeto_de_pesquisa\\files\\teste_tkinter\\img\\favicon.png")
-        self.image = self.image.subsample(1, 1)
-        self.labelimg = t.Label(image=self.image)
-        self.labelimg.place(x=12, y=0)
+        self.recurso = gr()
+        self.aquisicao = Aquisicao(url=self.url)
+
+        self.legenda = t.Label(self.root, text='Legenda', font='Arial 12 bold').place(x=12, y=360)
+
 
         self.legenda = t.Label(self.root, text='Legenda',
                                font='Arial 12 bold').place(x=12, y=360)
@@ -23,15 +28,7 @@ class Relatorio():
         self.msg1 = t.Label(self.root, text='Projeto ', font='arial 12 bold')
         self.msg1.place(x=400, y=40)
 
-        self.lista = [
-            "Projeto 1",
-            "Projeto 2",
-            "Projeto 3",
-            "Projeto 4"]  # Lsta será salva em um arquivo binário
-        self.projeto = ttk.Combobox(self.root, values=self.lista, width=62)
-        self.projeto.place(x=550, y=40, height=20,
-                           relwidth=0.42, relheight=0.01)
-        self.projeto.current(0)
+        self.recurso.monstarListaProjetos(root=self.root)
 
         self.msg3 = t.Label(self.root, text='Identificação',
                             font='arial 12 bold')
@@ -88,8 +85,10 @@ class Relatorio():
 
     def voltar(self):
         self.root.destroy()
-        from transicao import Transicao as T
-        T(n=4)
+        from tela.cadastrarAmostra import CadastrarAmostra as CA 
+        CA(im=self.url, caminho=self.url)
+
+
 
     def estagios(self):
         # Definir função para o processamento de imagem

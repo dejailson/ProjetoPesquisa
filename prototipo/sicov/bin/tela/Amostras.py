@@ -3,6 +3,8 @@ from tkinter import ttk
 from util.binario import Dados as dd
 from PIL import ImageTk,Image
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
+from tela.cadastrarAmostra import CadastrarAmostra as CA
+import config.Parametro as param
 
 global listaG
 listaG = []
@@ -16,48 +18,39 @@ class Amostras:
         self.w2.pack(fill="both", expand="yes", padx=10, pady=5)
         self.root.title('Amostras')
 
-        self.msg1 = t.Label(self.root, text='Filtros', font='arial 9 bold')
+        self.binario = dd()
+        self.recurso = gr()
+
+        self.msg1 = t.Label(self.root, text='Filtros', font=param.FONTE_OUTRA[0])
         self.msg1.place(x=30, y=0)
-
-        self.msg2 = t.Label(self.root, text='Identificação', font='arial 16 bold')
+        self.msg2 = t.Label(self.root, text='Identificação', font=param.FONTE_OUTRA[3])
         self.msg2.place(x=12, y=50)
-
         self.Identificacao = t.Entry(self.root, width=65, bord=2)
         self.Identificacao.place(x=160, y=55, height=30)
 
-        self.msg3 = t.Label(self.root, text='Projeto', font='arial 14 bold')
+        self.msg3 = t.Label(self.root, text='Projeto', font=param.FONTE_OUTRA[2])
         self.msg3.place(x=12, y=150)
+        self.recurso.monstarListaProjetos(root=self.root, tela='Amostra')
+        self.botao_pesquisar = t.Button(self.root, text=' Pesquisar ', font=param.FONTE_PADRAO).place(x=570, y=149)#sem ação
 
-        self.visu(numero=1)
-
-
-        self.botao_pesquisar = t.Button(self.root, text=' Pesquisar ', font='arial 12 bold').place(x=570, y=149)#sem ação
-
-        self.botao_adicionar = t.Button(self.root, text='+ Incluir Novo', font='arial 10 bold', command=lambda:self.mudarTela()).place(x=580, y=265)#sem ação
+        self.botao_adicionar = t.Button(self.root, text='+ Incluir Novo', font=param.FONTE_OUTRA[1], command=lambda:self.mudarTela())
+        self.botao_adicionar.place(x=580, y=265)
 
         self.tree = ttk.Treeview(self.root, selectmode="browse", column=("coluna1", "coluna2", "coluna3", "coluna4", "coluna5"), show="headings")
-
         self.tree.column("coluna1", width=50, minwidth=50)
         self.tree.heading('#1', text=' ')
-
         self.tree.column("coluna2", width=150, minwidth=50)
         self.tree.heading('#2', text='Projeto')
-
         self.tree.column("coluna3", width=150, minwidth=50)
         self.tree.heading('#3', text='Identificação')
-
         self.tree.column("coluna4", width=100, minwidth=50)
         self.tree.heading('#4', text='Coordenador')
-
         self.tree.column("coluna5", width=100, minwidth=50)
         self.tree.heading('#5', text='Ações')
 
         self.visu()
 
         self.tree.place(x=15, y=300, height = 115, width=540)
-
-        self.binario = dd()
-        self.recurso = gr()
 
         self.caminho_lapis = self.recurso.carregarIconeLapis()
         self.img_lapis = Image.open(self.caminho_lapis)
@@ -77,7 +70,8 @@ class Amostras:
         self.imagem_lixeira = ImageTk.PhotoImage(self.resu)
         self.imagem_lixeira_L = t.Button(image=self.imagem_lixeira).place(x=650, y=315)
 
-        self.button2 = t.Button(self.root, text='Voltar', command=lambda:self.mudarTela(var=1)).place(x=570, y=450, width=100)
+        self.button2 = t.Button(self.root, text='Voltar', command=lambda:self.mudarTela(var=1))
+        self.button2.place(x=570, y=450, width=100)
 
         self.root.mainloop()
             
@@ -88,44 +82,37 @@ class Amostras:
         imge = imge.resize((self.basewidth,self.hsize), Image.ANTIALIAS)
         return imge
 
-    def visu(self, numero=None):
+    def visu(self, numero=None):#incompleto
         self.dados1 = dd(NomeArquivo='Amostras_Projeto.dat')
         self.dados2 = dd()
-        self.informacoes1 = self.dados1.lerBin()
-        self.informacoes2 = self.dados2.lerBin()
+        self.informacoes1 = self.dados1.lerBin()#dados dos projetos cadastrados
+        self.informacoes2 = self.dados2.lerBin()#informações sobre as amostras
         self.lista = []
-        if not numero == None:
-            if not self.informacoes1 == None:
-                for c in self.informacoes1[:]:
-                    self.lista.append(c[0])
-            else:
-                self.lista.append('Sem Projetos Cadastrado')
-
-            self.projeto = ttk.Combobox(self.root, values=self.lista, width=62)
-            self.projeto.place(x=160, y=150, height=30)
-            self.projeto.current(0)     
-        else:
+        try:
             self.cont = 1
             for c in self.informacoes1:
-                self.lista = [self.cont, c[0], c[1]]
-                for x in self.informacoes2:
-                    if c[0] == x[:][0]:
-                        for d in x[3]:
-                            if 'Sim' in d[:]:
-                                self.lista.append(d[1])
+                self.lista = [self.cont, c[0], c[1]]#c[0] quivale ao nome do projeto no arquivo projeto.dat
+                for x in self.informacoes2[:]:#irá pecorrer cada amostra cadastrada
+                    #irá verificar se o nome do projeto cadastrado é igual
+                    #x[0] é a posição que está localizado o nome do projeto no arquivo das amostras
+                    if c[0] == x[0]:
+                        for d in x[3]:#pecorre os memros cadastrado no projeto
+                            if 'Sim' in d[:]:#verifica o membro que está cadastrado como coordenador
+                                self.lista.append(d[1])#nome do membro coordenador
                                 self.tree.insert("", 'end',values=self.lista, tag='1')
                                 break
                         break
                 self.cont += 1
+        except:
+            return None
 
     def mudarTela(self, var=None):
         if var == 1:
             self.root.destroy()
-            from main import Main
-            Main()
+            from tela.TelaPrincipal import TelaPrincipal
+            TelaPrincipal()
         else:
             self.root.destroy()
-            from tela.cadastrarAmostra import CadastrarAmostra as CA
             CA()
 
 

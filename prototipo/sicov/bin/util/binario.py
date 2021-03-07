@@ -5,7 +5,7 @@ import pickle
 
 class Dados:
     def __init__(self, NomeArquivo='Projetos.dat'):
-        self.nomePasta = 'Dados_do_Projeto'
+        self.nomePasta = 'projetos_e_amostras'
         self.NomeArquivo = NomeArquivo
 
     def criar_Pasta(self):

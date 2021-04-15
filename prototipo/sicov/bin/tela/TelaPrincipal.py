@@ -1,5 +1,4 @@
 import tkinter as t
-
 from tela.Projeto import Projeto
 from tela.Amostras import Amostras
 from util.binario import Dados as dd
@@ -27,6 +26,7 @@ class TelaPrincipal():
         self.nada = t.Label(self.root, text='   ', font=param.FONTE_TITULO).pack()
         self.binario = dd()
         self.recurso = gr()
+        self.recurso.banco()
         self.nome_img = self.recurso.carregarImagemFundo()
         self.img = ImageTk.PhotoImage(Image.open(self.nome_img))
         self.ima_l = t.Label(imag=self.img, width=700, height=400).pack()

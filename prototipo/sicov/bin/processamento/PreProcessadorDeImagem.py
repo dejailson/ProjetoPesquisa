@@ -262,7 +262,7 @@ class PreProcessadorDeImagem:
             super().__init__()
             self.__imagem = imagem
 
-        def realcarBordaPorCanny(self, limiteMinimo=0, limiteMaxima=50):
+        def realcarBordaPorCanny(self, limiteMinimo=1, limiteMaxima=1):
             self._adicionarRecurso(self.LIMITE_MINIMO_KEY, limiteMinimo)
             self._adicionarRecurso(self.LIMITE_MAXIMO_KEY, limiteMaxima)
             self._adicionarTarefa(self.__executarRealcePorCanny)
@@ -273,7 +273,7 @@ class PreProcessadorDeImagem:
             return self
 
         def realcarBordaPorFiltroRealce(self, fatorRealce=1, suavizacao=1,
-                                        matrix=(1, 1)):
+                                        matrix=1):
             self._adicionarRecurso(self.FATOR_REALCE_KEY, fatorRealce)
             self._adicionarRecurso(self.SUAVIZACAO_KEY, suavizacao)
             self._adicionarRecurso(self.MATRIX_KEY, matrix)

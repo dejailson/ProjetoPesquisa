@@ -4,7 +4,9 @@ from util.binario import Dados as dd
 from PIL import ImageTk,Image
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
 from tela.cadastrarAmostra import CadastrarAmostra as CA
+from config.Parametro import BANCO_DADOS
 import config.Parametro as param
+import shelve
 
 global listaG
 listaG = []
@@ -83,6 +85,17 @@ class Amostras:
         return imge
 
     def visu(self, numero=None):#incompleto
+        self.dados = shelve.open(BANCO_DADOS)
+        self.lista = self.dados['Amostra']
+        self.cont = 1
+        for c in self.lista:
+            self.list = [self.cont]
+            self.list.append(c.nomeProjeto)
+            self.list.append(c.identificacao)
+            self.tree.insert("", 'end',values=self.list,  tag='1')
+            self.cont += 1
+        self.dados.close()
+        '''
         self.dados1 = dd(NomeArquivo='Amostras_Projeto.dat')
         self.dados2 = dd()
         self.informacoes1 = self.dados1.lerBin()#dados dos projetos cadastrados
@@ -104,7 +117,7 @@ class Amostras:
                         break
                 self.cont += 1
         except:
-            return None
+            return None'''
 
     def mudarTela(self, var=None):
         if var == 1:

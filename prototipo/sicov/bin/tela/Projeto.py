@@ -6,6 +6,8 @@ from util.binario import Dados as dd
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
 from PIL import ImageTk
 from PIL import Image
+import shelve
+from config.Parametro import BANCO_DADOS
 
 class Projeto():
     def __init__(self):
@@ -96,23 +98,20 @@ class Projeto():
             from tela.TelaPrincipal import TelaPrincipal
             TelaPrincipal()
 
-    def visu(self, num=None):#incompleto
-        #A função carrega os dados armazenados em Projetos.dat, 
-        #então será pecorrido a lista afim de buscar as informação do nome,
-        #data de criação e o coordenador do projeto.
-        self.dados = dd()
-        self.informacoes = self.dados.lerBin()
+    def visu(self, num=None):
+        self.dados = shelve.open(BANCO_DADOS)
+        self.lista = self.dados['Projeto']
         self.cont = 1
-        try:
-            for c in self.informacoes:
-                self.lista = [self.cont, c[0], c[1]]
-                for d in c[3]:
-                    if d[3] in 'Sim':
-                        self.lista.append(d[1])
-                        self.tree.insert("", 'end',values=self.lista, tag='1')
-                        break
-                self.cont += 1
-        except TypeError:
-            self.tree.insert("", 'end',values=[], tag='1')
+        for c in self.lista:
+            self.list = [self.cont]
+            self.list.append(c.nome)
+            self.list.append(c.data)
+            for d in c.pesquisadores:
+                if d.coordenador == 'Sim':
+                    self.list.append(d.nome)
+            self.tree.insert("", 'end',values=self.list,  tag='1')
+            self.cont += 1
+        self.dados.close()
+        
                 
 

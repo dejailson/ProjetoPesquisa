@@ -1,6 +1,8 @@
 import os
 import config.Parametro as param
 from util.binario import Dados as dd
+from config.Parametro import BANCO_DADOS
+import shelve
 from tkinter import ttk
 
 
@@ -46,15 +48,23 @@ class GerenciadorRecurso:
             self.c = 20
             self.d = 0.42
             self.e = 0.01
-        self.dados1 = dd()
-        self.informacoes = self.dados1.lerBin()
+        self.bd = shelve.open(BANCO_DADOS)
+        self.informacoes = self.bd['Projeto']
         self.lista = []
-        if not self.informacoes == None:
+        if not self.informacoes == []:
             for c in self.informacoes[:]:
-                self.lista.append(c[0])
+                self.lista.append(c.nome)
         else:
             self.lista.append('Sem Projetos Cadastrado')
         self.projeto = ttk.Combobox(root, values=self.lista, width=62)
         self.projeto.place(x=self.a, y=self.b, height=self.c, relwidth=self.d, relheight=self.e)
         self.projeto.current(0)
         #x=550, y=40, height=20, relwidth=0.42, relheight=0.01
+    
+    def banco(self):
+        self.bd = shelve.open(BANCO_DADOS)
+        if 'Projeto' not in self.bd:
+            self.bd['Projeto'] = []
+            self.bd['Amostra'] = []
+            self.bd.close()
+            

@@ -3,7 +3,7 @@ from tkinter import ttk
 from util.binario import Dados as dd
 from PIL import Image, ImageTk
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
-from processamento.aquisicao_img import Aquisicao
+from processamento_temp.aquisicao_img import Aquisicao
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
 
 

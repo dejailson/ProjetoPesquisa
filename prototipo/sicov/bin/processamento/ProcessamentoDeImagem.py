@@ -1,24 +1,23 @@
 from processamento.PreProcessadorDeImagem import PreProcessadorDeImagem as PDI 
-from processamento.SegmentadorDeImagem import SegmentadorDeImagem as SDI 
+from processamento.SegmentadorDeImagem import SegmentadorDeImagem as SDI
+from .ExtracaoDeCaracteristicas.MedidasOvos import azul
+from .ExtracaoDeCaracteristicas.mask import AplicarMascara as AM
+from processamento.ContaOvos import conta
 import cv2
 class ProcessamentoDeImagem:
     def __init__(self):
         self.PDI = PDI()
         self.SDI = SDI()
-        pass
+        self.AM = AM()
+        #self.Medidas = MO()
 
     def PreProcessamento(self, imagem):
-        '''self.PDI.PorRealce.FATOR_REALCE_KEY = 
-        self.PDI.PorRealce.LIMITE_MAXIMO_KEY = 
-        self.PDI.PorRealce.LIMITE_MINIMO_KEY = 
-        self.PDI.PorRealce.MATRIX_KEY = 
-        self.PDI.PorRealce.SUAVIZACAO_KEY = 
-        self.PDI.PorRealce.TAMANHO_MASCARA_KEY =
-        self.PDI.PorRealce.TIPO_REALCE_SOBEL = '''
-
-        self.SDI.OBJETO_INTERESSE_COR_KEY = 0.4
-        self.SDI.LIMIAR_KEY = 0.4
-        ret,thresh4 = cv2.threshold(imagem,127,200,cv2.THRESH_TOZERO)
-       
-        return self.SDI.PorBinarizacao(imagem=self.PDI.porTonalidade(imagem=imagem).equalizarNivelTomCinza().executar()).objetoInteresseBranco().executar() #(thresh4, 0.4).executar()
+        imagem = self.AM.desenharMascara(imagem)
+        imagem = cv2.cvtColor(imagem, cv2.COLOR_RGB2BGRA)
+        imagem [:, :,0] = cv2.equalizeHist(imagem[:, :,0])
+        return imagem
         #return self.PDI.porRealce(imagem=imagem).realcarBordaPorCanny(50, 100).realcarBordaPorFiltroRealce(3, 50, (3, 3)).executar()
+
+    def ExtrairCaracteristicas(self, imagem):
+        #self.img = self.Segmentacao(imagem=imagem) 
+        return azul(self.PreProcessamento(imagem=imagem))

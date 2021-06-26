@@ -9,4 +9,5 @@ IMAGEM_FUNDO = 'ovos.jpg'
 FONTE_PADRAO = 'Arial 12 bold'
 FONTE_TITULO = 'Arial 20 bold'
 FONTE_OUTRA = ['Arial 9 bold', 'Arial 10 bold', 'Arial 14 bold', 'Arial 16 bold']
+BANCO_DADOS = 'dados_projeto.db'
 

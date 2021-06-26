@@ -3,6 +3,6 @@ class Amostras:
         self.nomeProjeto = nomeProjeto
         self.identificacao = identificacao
         self.numFemeas = numFemeas
-        self.CCT = CCT
-        self.CA = CA 
-        self.T = T
+        self.CCT = float(CCT)
+        self.CA = float(CA)
+        self.T = float(T)

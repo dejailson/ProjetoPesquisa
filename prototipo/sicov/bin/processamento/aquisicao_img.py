@@ -27,9 +27,10 @@ class Aquisicao:
         self.np_array = self.np_array[:, ::-1].copy()
         self.ProDI = ProID()
 
-        self.juntar = np.concatenate((self.np_array, self.ProDI.PreProcessamento(self.np_array)), axis=1)
-        
-        cv2.imshow('Image Sharpening', self.juntar)
+        #self.juntar = np.concatenate((self.np_array, ), axis=1)
+        self.np_array = cv2.blur(self.np_array, (3, 3))
+        o, img = self.ProDI.ExtrairCaracteristicas(self.np_array)
+        cv2.imshow('Image Sharpening'+str(o[0]), img)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
         '''kernel = np.array([[-1,-1,-1], 

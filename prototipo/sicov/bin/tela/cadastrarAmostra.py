@@ -5,12 +5,12 @@ from util.binario import Dados as dd
 from PIL import ImageTk,Image
 from tkinter import filedialog as fdg
 from tela.Relatorio_do_Processamento import Relatorio as rel
-from processamento_temp.aquisicao_img import Aquisicao
+from processamento.aquisicao_img import Aquisicao
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
 from util.modelo.amostras import Amostras
 from config.Parametro import BANCO_DADOS
 import shelve
-
+global amostra
 class CadastrarAmostra():
     def __init__(self, im=None, caminho=None):
         self.dados_membros = []
@@ -79,6 +79,8 @@ class CadastrarAmostra():
                                             CCT=self.cefalotorax.get().strip(),
                                             CA=self.abdomem.get().strip(),
                                             T=self.telson.get().strip())
+
+        amostra = self.amostra
         try: 
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Amostra']
@@ -100,9 +102,15 @@ class CadastrarAmostra():
         else:
             self.aquisicao = Aquisicao(url=self.caminho_img)
 
-    def mudarTela(self, var=None):
+    def mudarTela(self, var=None ):
+        self.amostra = Amostras(nomeProjeto=self.recurso.projeto.get().strip(), 
+                                            identificacao=self.identificacao.get().strip(), 
+                                            numFemeas=self.NFemea.get().strip(),
+                                            CCT=self.cefalotorax.get().strip(),
+                                            CA=self.abdomem.get().strip(),
+                                            T=self.telson.get().strip())
         from tela.Amostras import Amostras as tela_amostras
-        if var == 1 or var == 2:
+        if var == 1 and 2:
             self.root.destroy()
             tela_amostras()
 
@@ -110,7 +118,8 @@ class CadastrarAmostra():
             try:
                 if self.caminho_img != None:
                     self.root.destroy()
-                    rel(url=self.caminho_img)
+                    rel(url=self.caminho_img, amostra=self.amostra)
+                    
                 else:
                     self.alerta = t.Label(self.root, text='Erro: Escolha uma imagem', font='Arial 15 bold')
                     self.alerta.place(x=580, y=280)

@@ -192,8 +192,8 @@ import imutils
 def azul(img):
     kernel = np.ones((5 ,5), np.uint8)
     imagem = img
-    rangomax = np.array([255, 160, 130, 255]) # 119, 148, 195 B, G, R
-    rangomin = np.array([80,   80,   70, 0])#61, 112,  
+    rangomax = np.array([255, 160, 130, 255]) 
+    rangomin = np.array([80,   80,   70, 0])  
     mask = cv2.inRange(imagem, rangomin,  rangomax )
     imagem = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
     _, threshold = cv2.threshold(imagem, 100, 255, cv2.THRESH_BINARY)

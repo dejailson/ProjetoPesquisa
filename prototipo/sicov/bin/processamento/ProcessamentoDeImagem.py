@@ -13,8 +13,8 @@ class ProcessamentoDeImagem:
 
     def PreProcessamento(self, imagem):
         imagem = self.AM.desenharMascara(imagem)
-        imagem = cv2.cvtColor(imagem, cv2.COLOR_RGB2BGRA)
         imagem [:, :,0] = cv2.equalizeHist(imagem[:, :,0])
+        imagem = cv2.cvtColor(imagem, cv2.COLOR_RGB2BGRA)
         return imagem
         #return self.PDI.porRealce(imagem=imagem).realcarBordaPorCanny(50, 100).realcarBordaPorFiltroRealce(3, 50, (3, 3)).executar()
 

@@ -4,6 +4,8 @@ from tkinter import ttk
 from tela.CadastrarProjeto import cadastrarProjeto as CP
 from util.binario import Dados as dd
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
+from tela.opcoes import Selecao
+from tela.visu_Projeto import cadastrarProjeto
 from PIL import ImageTk
 from PIL import Image
 import shelve
@@ -67,21 +69,44 @@ class Projeto():
         self.img_lapis = Image.open(self.caminho_lapis)
         self.resu = self.red(self.img_lapis)
         self.imagem_lapis = ImageTk.PhotoImage(self.resu)
-        self.imagem_lapis_L = t.Button(image=self.imagem_lapis).place(x=570, y=315)
+        self.imagem_lapis_L = t.Button(image=self.imagem_lapis, command=lambda: self.editar()).place(x=570, y=315)
 
         self.caminho_olhos = self.recurso.carregarIconeOlho()
         self.img_olhos = Image.open(self.caminho_olhos)
         self.resu = self.red(self.img_olhos)
         self.imagem_olhos = ImageTk.PhotoImage(self.resu)
-        self.imagem_olhos_L = t.Button(image=self.imagem_olhos).place(x=610, y=315)
+        self.imagem_olhos_L = t.Button(image=self.imagem_olhos, command=lambda: self.viewProjeto()).place(x=610, y=315)
 
         self.caminho_lixeira = self.recurso.carregarIconeLixeira()
         self.img_lixeira = Image.open(self.caminho_lixeira)
         self.resu = self.red(self.img_lixeira)
         self.imagem_lixeira = ImageTk.PhotoImage(self.resu)
-        self.imagem_lixeira_L = t.Button(image=self.imagem_lixeira).place(x=650, y=315)
+        self.imagem_lixeira_L = t.Button(image=self.imagem_lixeira, command=lambda: self.remover()).place(x=650, y=315)
 
         self.pro.mainloop()
+    def opcao(self, num=None):
+        self.pro.destroy()
+        if num == None:
+            Selecao()
+        if num == 1:
+            Selecao(x=1)
+        else:
+            Selecao(x=3)
+
+    def editar(self):
+        if self.tree.selection() == ():
+            telaLerta = t.Tk()
+            label = t.Label(telaLerta, text='Selecione um projeto', font='Arial 12 bold').pack()
+            telaLerta.mainloop()
+        else:
+            self.dados = shelve.open(BANCO_DADOS)
+            self.lista = self.dados['Projeto']
+            posicao = self.tree.selection()[0]
+            projeto = self.lista[int(posicao[-1])-1]
+            self.dados.close()
+            from tela.CadastrarProjeto import cadastrarProjeto
+            self.pro.destroy()
+            cadastrarProjeto(projeto=projeto)
 
     def red(self, imge):
         self.basewidth = 25
@@ -90,6 +115,7 @@ class Projeto():
         imge = imge.resize((self.basewidth,self.hsize), Image.ANTIALIAS)
         return imge
 
+
     def mudarTela(self, var=None):
         self.pro.destroy()
         if var == None:
@@ -97,6 +123,35 @@ class Projeto():
         else:
             from tela.TelaPrincipal import TelaPrincipal
             TelaPrincipal()
+
+
+    def viewProjeto(self):
+        if self.tree.selection() == ():
+            telaLerta = t.Tk()
+            label = t.Label(telaLerta, text='Selecione um projeto', font='Arial 12 bold').pack()
+            telaLerta.mainloop()
+        else:
+            self.dados = shelve.open(BANCO_DADOS)
+            self.lista = self.dados['Projeto']
+            posicao = self.tree.selection()[0]
+            projeto = self.lista[int(posicao[-1])-1]
+            self.dados.close()
+            cadastrarProjeto(lista=projeto)
+
+    def remover(self):
+        if self.tree.selection() == ():
+            telaLerta = t.Tk()
+            label = t.Label(telaLerta, text='Selecione um projeto, antes de excluir-lo', font='Arial 12 bold').pack()
+            telaLerta.mainloop()
+        else:
+            self.dados = shelve.open(BANCO_DADOS)
+            self.lista = self.dados['Projeto']
+            posicao = self.tree.selection()[0]
+            self.lista.remove(self.lista[int(posicao[-1])-1])
+            self.tree.delete(posicao)
+            self.dados['Projeto'] = self.lista
+            self.dados.close()
+
 
     def visu(self, num=None):
         self.dados = shelve.open(BANCO_DADOS)

@@ -8,31 +8,22 @@ import numpy as np
 
 
 class Aquisicao:
-    def __init__(self, url, validador=None):
+    def __init__(self, url, validador=1):
         self.url = url
         #self.l = SG().porAdaptacao(self.t)
         if validador == None:
             self.img = cv2.imread(self.url)
-            self.imagem_cv2 = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
-            self.imagem_cv_img = Image.fromarray(self.imagem_cv2)#self.imagem_cv2
-            self.imge = self.imagem_cv_img
+            self.imge = self.img
+        if validador == 2:
+            self.imge = Image.fromarray(url)
         else:
             self.imge = Image.open(self.url)
         self.basewidth = 400
         self.wpercent = (self.basewidth/float(self.imge.size[0]))
         self.hsize = int((float(self.imge.size[1])*float(self.wpercent)))
         self.imge = self.imge.resize((self.basewidth,self.hsize), Image.ANTIALIAS)
-
-        self.np_array = np.array(self.imge)
-        self.np_array = self.np_array[:, ::-1].copy()
-        self.ProDI = ProID()
-
-        #self.juntar = np.concatenate((self.np_array, ), axis=1)
-        self.np_array = cv2.blur(self.np_array, (3, 3))
-        o, img = self.ProDI.ExtrairCaracteristicas(self.np_array)
-        cv2.imshow('Image Sharpening'+str(o[0]), img)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        self.imagem_tk = ImageTk.PhotoImage(self.imge)
+        self.imge_label = t.Label(image=self.imagem_tk, height="350", width="350").place(x=12, y=0)
         '''kernel = np.array([[-1,-1,-1], 
                            [-1, 9,-1],
                            [-1,-1,-1]])

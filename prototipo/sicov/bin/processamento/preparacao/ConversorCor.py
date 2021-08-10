@@ -35,3 +35,4 @@ class ConversorCor:
         except cv.error:
             raise ProcessamentoErro('ConversorCor.equalizarNivelTomCinza',
                                     ConversorCor.MENSAGEM_ERROR_EQUALIZAR)
+                    

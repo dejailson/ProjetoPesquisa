@@ -8,22 +8,32 @@ from processamento.aquisicao_img import Aquisicao
 from util.modelo.amostras import Amostras
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
 from util.modelo.camarao import Camarao
+import numpy as np
 import cv2
 class Relatorio():
     def __init__(self, url, amostra):
         self.Processamento = ProDI()
         self.url = url
-        imagem = cv2.imread(url)
         
-        self.listaOvos = self.Processamento.ExtrairCaracteristicas(imagem=imagem)
-        self.camarao = Camarao(amostra.CCT, amostra.CA, amostra.T, self.listaOvos)
-        self.mediaMassaOvos, self.volumeMassaOvos = self.camarao.volumeDaMassaDosOvos()
-        self.amostra = amostra
         self.root = t.Tk()
         self.root.geometry("1000x450")
         self.root.title('Relatório do Processamento')
         self.recurso = gr()
-        self.aquisicao = Aquisicao(url=self.url)
+        imagem = cv2.imread(url)
+        imagem, self.listaOvos = self.Processamento.ExtrairCaracteristicas(imagem)
+
+        self.camarao = Camarao(amostra.CCT, amostra.CA, amostra.T, self.listaOvos)
+        self.mediaMassaOvos, self.volumeMassaOvos = self.camarao.volumeDaMassaDosOvos()
+        self.mediaMassaOvos = str(self.mediaMassaOvos).split('.')
+        self.mediaMassaOvos = self.mediaMassaOvos[0] + '.' + self.mediaMassaOvos[1][:2]
+
+
+        self.volumeMassaOvos = str(self.volumeMassaOvos).split('.')
+        self.volumeMassaOvos = self.volumeMassaOvos[0] + '.' + self.volumeMassaOvos[1][:2]
+        self.amostra = amostra
+        imagem = Aquisicao(imagem, 2)
+        #imagem = ImageTk.PhotoImage(imagem)
+        #self.imge_label = t.Label(image=imagem, height="350", width="350").place(x=12, y=0)
         
 
         self.legenda = t.Label(self.root, text='Legenda', font='Arial 12 bold').place(x=12, y=360)
@@ -74,8 +84,9 @@ class Relatorio():
         self.msg7 = t.Label(
             self.root, text='Média de Fecundidade', font='arial 12 bold')
         self.msg7.place(x=400, y=240)
-
-        self.MFecundidade = t.Label(self.root, text=str(self.camarao.MediaFecundidade)+'cm', font=self.font, bg='white', relief="solid")
+        self.MediaFecundidade = str(self.camarao.MediaFecundidade).split('.')
+        self.MediaFecundidade = self.MediaFecundidade[0] + '.' + self.MediaFecundidade[1][:2]
+        self.MFecundidade = t.Label(self.root, text=self.MediaFecundidade, font=self.font, bg='white', relief="solid")
         self.MFecundidade.place(x=650, y=240, height=20,
                                 relwidth=0.32, relheight=0.01)
 

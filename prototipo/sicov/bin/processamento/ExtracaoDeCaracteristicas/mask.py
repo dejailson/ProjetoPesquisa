@@ -12,7 +12,7 @@ class AplicarMascara:
     def detectarCirculos(self, img):
         gray = cv2.medianBlur(cv2.cvtColor(img, cv2.COLOR_RGB2GRAY), 5)
         return np.uint16(np.around(cv2.HoughCircles(gray, \
-             cv2.HOUGH_GRADIENT, 1, 60, param1=50, param2=50, \
+             cv2.HOUGH_GRADIENT, 1, 100, param1=50, param2=50, \
              minRadius=0, maxRadius=0)))
 
     # draw mask

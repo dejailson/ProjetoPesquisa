@@ -104,7 +104,6 @@ class MedidasOvos:
                 .metodoAdaptativoMedian()\
                 .porAdaptacao(200, 3, 6)\
                 .executar()
-            print('1')
             circles = self.identificarCirculos(erode)
             for i in circles[0,:]:
                 #circulo externo

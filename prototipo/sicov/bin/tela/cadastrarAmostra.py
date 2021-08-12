@@ -1,4 +1,5 @@
 import tkinter as t
+from tkinter import messagebox
 from tkinter import ttk
 import cv2
 from util.binario import Dados as dd
@@ -12,7 +13,19 @@ from config.Parametro import BANCO_DADOS
 import shelve
 global amostra
 class CadastrarAmostra():
-    def __init__(self, im=None, caminho=None):
+    def __init__(self, im=None, caminho=None, amostra=None):
+        self.identificacaoA =''
+        self.numFemeaA = ''
+        self.CCTA = ''
+        self.CAA = ''
+        self.TA = ''
+        if amostra != None:
+            self.identificacaoA = amostra.identificacao
+            self.numFemeaA = amostra.numFemeas
+            self.CCTA = amostra.CCT
+            self.CAA = amostra.CA
+            self.TA = amostra.T
+        self.verificadorCam = 0
         self.dados_membros = []
         self.root = t.Tk()
         self.root.geometry("1000x400")
@@ -34,30 +47,35 @@ class CadastrarAmostra():
         self.msg3.place(x=380, y=80)
 
         self.identificacao = t.Entry(self.root, width=62, bord=2)
+        self.identificacao.insert(0, self.identificacaoA)
         self.identificacao.place(x=550, y=80, height=20, relwidth=0.42, relheight=0.01)
         
         self.msg4 = t.Label(self.root, text='Número de Fêmeas Coletadas', font='arial 12 bold')
         self.msg4.place(x=380, y=120)
 
         self.NFemea = t.Entry(self.root, width=62, bord=2)
+        self.NFemea.insert(0, self.numFemeaA)
         self.NFemea.place(x=630, y=120, height=20, relwidth=0.32, relheight=0.01)
 
         self.msg5 = t.Label(self.root, text='Comprimento do Cefalotórax', font='arial 12 bold')
         self.msg5.place(x=380, y=160)
 
         self.cefalotorax = t.Entry(self.root, width=52, bord=2)
+        self.cefalotorax.insert(0, self.CCTA)
         self.cefalotorax.place(x=630, y=160, height=20)
 
         self.msg6 = t.Label(self.root, text='Comprimento do Abdome', font='arial 12 bold')
         self.msg6.place(x=380, y=200)
 
         self.abdomem = t.Entry(self.root, width=52, bord=2)
+        self.abdomem.insert(0, self.CAA)
         self.abdomem.place(x=630, y=200, height=20)
 
         self.msg7 = t.Label(self.root, text='Comprimento do Telson', font='arial 12 bold')
         self.msg7.place(x=380, y=240)
 
         self.telson = t.Entry(self.root, width=52, bord=2)
+        self.telson.insert(0, self.TA)
         self.telson.place(x=630, y=240, height=20)
 
 
@@ -73,23 +91,27 @@ class CadastrarAmostra():
         self.root.mainloop()
 
     def adicionar(self):
-        self.amostra = Amostras(nomeProjeto=self.recurso.projeto.get().strip(), 
-                                            identificacao=self.identificacao.get().strip(), 
-                                            numFemeas=self.NFemea.get().strip(),
-                                            CCT=self.cefalotorax.get().strip(),
-                                            CA=self.abdomem.get().strip(),
-                                            T=self.telson.get().strip())
+        try:
+            self.amostra = Amostras(nomeProjeto=self.recurso.projeto.get().strip(), 
+                                                identificacao=self.identificacao.get().strip(), 
+                                                numFemeas=self.NFemea.get().strip(),
+                                                CCT=self.cefalotorax.get().strip(),
+                                                CA=self.abdomem.get().strip(),
+                                                T=self.telson.get().strip())
+            amostra = self.amostra
+            try: 
+                self.dados = shelve.open(BANCO_DADOS)
+                self.lista = self.dados['Amostra']
+                self.lista.append(self.amostra)
+                self.dados['Amostra'] = self.lista
+                self.dados.close()
+            except:
+                print('Erro!')
+            self.mudarTela(var=1)
+        except ValueError:
+            messagebox.showerror('Erro', 'Preencha todos os campos!')
 
-        amostra = self.amostra
-        try: 
-            self.dados = shelve.open(BANCO_DADOS)
-            self.lista = self.dados['Amostra']
-            self.lista.append(self.amostra)
-            self.dados['Amostra'] = self.lista
-            self.dados.close()
-        except:
-            print('Erro!')
-        self.mudarTela(var=1)
+       
 
     def procurarB(self, num=None, url=None):
         self.caminho_img = url
@@ -97,38 +119,40 @@ class CadastrarAmostra():
             try:
                 self.caminho_img = fdg.askopenfilename(title='Procurar Imgem', filetypes=(('Arquivos png', '*.png'), ('Arquivos jpg', '*.jpg'), ('Todos os Arquivos', '*.*')))
                 self.aquisicao = Aquisicao(url=self.caminho_img, validador=1)
+                
+                self.verificadorCam += 1
             except AttributeError:
                 self.caminho_img = None
+                self.aquisicao = self.caminho_img
         else:
             self.aquisicao = Aquisicao(url=self.caminho_img)
 
+        self.verificadorCam += 1
+
     def mudarTela(self, var=None ):
-        if var != 2:
-            self.amostra = Amostras(nomeProjeto=self.recurso.projeto.get().strip(), 
-                                                identificacao=self.identificacao.get().strip(), 
-                                                numFemeas=self.NFemea.get().strip(),
-                                                CCT=self.cefalotorax.get().strip(),
-                                                CA=self.abdomem.get().strip(),
-                                                T=self.telson.get().strip())
-        from tela.Amostras import Amostras as tela_amostras
-        if var == 1 and var == 2:
-            self.root.destroy()
-            tela_amostras()
+        try:
+            if var != 2:
+                self.amostra = Amostras(nomeProjeto=self.recurso.projeto.get().strip(), 
+                                                    identificacao=self.identificacao.get().strip(), 
+                                                    numFemeas=self.NFemea.get().strip(),
+                                                    CCT=self.cefalotorax.get().strip(),
+                                                    CA=self.abdomem.get().strip(),
+                                                    T=self.telson.get().strip())
+            from tela.Amostras import Amostras as tela_amostras
+            if var == 1 or var == 2:
+                self.root.destroy()
+                tela_amostras()
 
-        else:
-            try:
-                if self.caminho_img != None:
-                    self.root.destroy()
-                    rel(url=self.caminho_img, amostra=self.amostra)
-                    
-                else:
-                    self.alerta = t.Label(self.root, text='Erro: Escolha uma imagem', font='Arial 15 bold')
-                    self.alerta.place(x=580, y=280)
+            else:
+                try:
+                    if self.caminho_img != None:
+                        self.root.destroy()
+                        rel(url=self.caminho_img, amostra=self.amostra)
                         
-            except AttributeError:
-                self.alerta = t.Label(self.root, text='Erro: Escolha uma imagem', font='Arial 15 bold')
-                self.alerta.place(x=580, y=280)
-
-
-
-
+                    else:
+                        messagebox.showerror("Erro","Escolha uma imagem!")
+                            
+                except AttributeError:
+                    messagebox.showerror("Erro","Escolha uma imagem!")
+        except ValueError:
+            messagebox.showerror('Erro', 'Preencha todos os campos corretamente!')

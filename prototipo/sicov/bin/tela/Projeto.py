@@ -1,10 +1,10 @@
 import tkinter as t
+from tkinter import messagebox
 import config.Parametro as param
 from tkinter import ttk
 from tela.CadastrarProjeto import cadastrarProjeto as CP
 from util.binario import Dados as dd
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
-from tela.opcoes import Selecao
 from tela.visu_Projeto import cadastrarProjeto
 from PIL import ImageTk
 from PIL import Image
@@ -84,20 +84,10 @@ class Projeto():
         self.imagem_lixeira_L = t.Button(image=self.imagem_lixeira, command=lambda: self.remover()).place(x=650, y=315)
 
         self.pro.mainloop()
-    def opcao(self, num=None):
-        self.pro.destroy()
-        if num == None:
-            Selecao()
-        if num == 1:
-            Selecao(x=1)
-        else:
-            Selecao(x=3)
 
     def editar(self):
         if self.tree.selection() == ():
-            telaLerta = t.Tk()
-            label = t.Label(telaLerta, text='Selecione um projeto', font='Arial 12 bold').pack()
-            telaLerta.mainloop()
+            messagebox.showerror("Erro","Selecione um Projeto!")
         else:
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Projeto']
@@ -127,9 +117,7 @@ class Projeto():
 
     def viewProjeto(self):
         if self.tree.selection() == ():
-            telaLerta = t.Tk()
-            label = t.Label(telaLerta, text='Selecione um projeto', font='Arial 12 bold').pack()
-            telaLerta.mainloop()
+            messagebox.showerror("Erro","Selecione um Projeto!")
         else:
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Projeto']
@@ -140,9 +128,7 @@ class Projeto():
 
     def remover(self):
         if self.tree.selection() == ():
-            telaLerta = t.Tk()
-            label = t.Label(telaLerta, text='Selecione um projeto, antes de excluir-lo', font='Arial 12 bold').pack()
-            telaLerta.mainloop()
+            messagebox.showerror("Erro","Selecione um Projeto!")
         else:
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Projeto']

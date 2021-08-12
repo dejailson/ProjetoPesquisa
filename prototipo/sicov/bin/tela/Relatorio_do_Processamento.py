@@ -106,23 +106,17 @@ class Relatorio():
     def voltar(self):
         self.root.destroy()
         from tela.cadastrarAmostra import CadastrarAmostra as CA 
-        CA(im=self.url, caminho=self.url)
+        CA(im=self.url, caminho=self.url, amostra=self.amostra)
 
 
 
     def estagios(self):
         # Definir função para o processamento de imagem
-        self.part1 = t.Label(self.root, text='I - Fase Inicial',
+        self.part1 = t.Label(self.root, text='Circulo Externo - Circurferencia do Ovo',
                              font='Arial 9 bold').place(x=12, y=390)
-        self.part2 = t.Label(self.root, text='II - Fase Inicial',
+        self.part2 = t.Label(self.root, text='Circulo Interno - Centroide',
                              font='Arial 9 bold').place(x=12, y=410)
-        self.part3 = t.Label(self.root, text='III - Fase Inicial',
-                             font='Arial 9 bold').place(x=12, y=430)
-
-        self.vermelho = t.Label(
-            self.root, text='Região em Vermelho - Óvulo', font='Arial 9 bold').place(x=150, y=390)
-        self.azul = t.Label(self.root, text='Região em Azul - Mancha Ocular',
-                            font='Arial 9 bold').place(x=150, y=410)
+        
 
 
 

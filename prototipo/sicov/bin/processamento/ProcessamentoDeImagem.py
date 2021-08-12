@@ -1,11 +1,9 @@
 import numpy as np
-from codigoNaoUtilizado import cortar
 from PIL import Image, ImageTk
 from processamento.PreProcessadorDeImagem import PreProcessadorDeImagem as PDI 
 from processamento.SegmentadorDeImagem import SegmentadorDeImagem as SDI
 from .ExtracaoDeCaracteristicas.MedidasOvos import MedidasOvos as MO
 from .ExtracaoDeCaracteristicas.mask import AplicarMascara as AM
-from processamento.ContaOvos import conta
 from PIL import Image
 import cv2
 class ProcessamentoDeImagem:

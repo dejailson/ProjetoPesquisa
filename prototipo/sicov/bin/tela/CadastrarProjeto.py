@@ -1,4 +1,5 @@
 import tkinter as t
+from tkinter import messagebox
 from tkinter import ttk
 from util.binario import Dados as dd
 from util.modelo.projeto import Projeto
@@ -166,7 +167,7 @@ class cadastrarProjeto:
         self.coordenador.current(0)
 
         self.butao1 = t.Button(self.tela, text="Salvar", font='arial 12 bold',
-                               command=lambda: self.adicionar())
+                               command=lambda: self.adicionar(x=x))
         self.butao1.place(x=100, y=250)
         self.butao2 = t.Button(self.tela, text="Cancelar", font='arial 12 bold', 
                                command=lambda: self.tela.destroy())
@@ -207,12 +208,12 @@ class cadastrarProjeto:
             print('Erro!')
         self.mudarTela()
 
-    def adicionar(self):
+    def adicionar(self, x=None):
         self.Membro_Pesquisador = Pesquisador(nome=self.pesquisador.get().strip(), 
                                                 matricula=self.matricula.get().strip(), 
                                                 tipoMembro=self.membro.get().strip(), 
                                                 coordenador=self.coordenador.get().strip())
-        if self.projetoNone == None:
+        if x!=None:
             if self.Membro_Pesquisador.coordenador == 'Sim':
                 self.validarSimNao = 1
             self.dados_membros.append(self.Membro_Pesquisador)
@@ -232,9 +233,7 @@ class cadastrarProjeto:
 
     def editarPesq(self):
         if self.tree.selection() == ():
-            telaLerta = t.Tk()
-            label = t.Label(telaLerta, text='Selecione um projeto', font='Arial 12 bold').pack()
-            telaLerta.mainloop()
+            messagebox.showerror("Erro","Selecione um Membro!")
         else:
             posicao = self.tree.selection()[0]
             pesqui = self.dados_membros[int(posicao[-1])-1]
@@ -243,13 +242,7 @@ class cadastrarProjeto:
     def remover(self):
         cont = 0
         if self.tree.selection() == ():
-            telaLerta = t.Tk()
-            label = t.Label(telaLerta, text='Selecione um membro, antes de excluir-lo', font='Arial 12 bold').pack()
-            if cont == 1:
-                telaLerta.destroy()
-            cont += 1
-
-            telaLerta.mainloop()
+            messagebox.showerror("Erro","Selecione um Membro!")
         else:
             posicao = self.tree.selection()[0]
             self.dados_membros.remove(self.dados_membros[int(posicao[-1])-1])

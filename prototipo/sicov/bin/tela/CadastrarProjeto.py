@@ -65,7 +65,7 @@ class cadastrarProjeto:
 
         self.botao_adicionar = t.Button(self.root, text='+ Adicionar',
                                         font='arial 10 bold', 
-                                        command=lambda : self.tela_Cad())
+                                        command=lambda : self.tela_Cad(x=1))
         self.botao_adicionar.place(x=600, y=265)
 
         self.tree = ttk.Treeview(self.root, selectmode="browse", 
@@ -114,10 +114,11 @@ class cadastrarProjeto:
         imge = imge.resize((self.basewidth,self.hsize), Image.ANTIALIAS)
         return imge
 
-    def tela_Cad(self):
+    def tela_Cad(self, x=None):
         lista = ['', '']
-        posicao = self.tree.selection()[0]
-        if self.projetoNone != None:
+        
+        if self.projetoNone != None and x==None:
+            posicao = self.tree.selection()[0]
             lista = [self.dados_membros[int(posicao[-1])-1].matricula, self.dados_membros[int(posicao[-1])-1].nome]
         self.tela = t.Tk()
         self.tela.geometry("400x300")
@@ -168,7 +169,7 @@ class cadastrarProjeto:
                                command=lambda: self.adicionar())
         self.butao1.place(x=100, y=250)
         self.butao2 = t.Button(self.tela, text="Cancelar", font='arial 12 bold', 
-                               command=lambda: self.mudarTela(root=self.tela))
+                               command=lambda: self.tela.destroy())
         self.butao2.place(x=200, y=250)
 
         self.tela.mainloop()

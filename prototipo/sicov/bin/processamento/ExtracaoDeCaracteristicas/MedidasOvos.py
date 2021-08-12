@@ -55,7 +55,6 @@ class MedidasOvos:
             self.listaOvos = []
 
             fig, ax = plt.subplots()
-            ax.imshow(img, cmap=plt.cm.gray)
 
             for props in regions:
                 y0, x0 = props.centroid
@@ -72,15 +71,14 @@ class MedidasOvos:
                     ax.plot((x0, x1), (y0, y1), '-r', linewidth=2.5)
                     ax.plot((x0, x2), (y0, y2), '-r', linewidth=2.5)
                     ax.plot(x0, y0, '.g', markersize=15)
+                    #cv2.line(self.__imagem,(int(x0),int(y0)), (int(x1), int(y1)), (255,255,255),2)
 
 
                     minr, minc, maxr, maxc = props.bbox
                     bx = (minc, maxc, maxc, minc, minc)
                     by = (minr, minr, maxr, maxr, minr)
                     #print(f'bx - by = {y1}')
-                    ax.plot(bx, by, '-b', linewidth=2.5)
-            ax.axis((0, 400, 400, 0))
-            plt.show()        
+                    ax.plot(bx, by, '-b', linewidth=2.5)      
             return self.__imagem, self.listaOvos
         
         def identificarCirculos(self, img):
@@ -90,8 +88,8 @@ class MedidasOvos:
 
         def cobrirCirculos(self):
             img = self.__imagem
-            rangomax = np.array([255, 255, 122, 255]) # 119, 148, 195 B, G, R
-            rangomin = np.array([80,   80, 70, 0])#61, 112,   
+            rangomax = np.array([255, 180, 122, 255]) # 119, 148, 195 B, G, R
+            rangomin = np.array([122,   122, 122, 255])#61, 112,   
             mask = cv2.inRange(img, rangomin,  rangomax)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             _, threshold = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
@@ -111,13 +109,11 @@ class MedidasOvos:
             for i in circles[0,:]:
                 #circulo externo
                 cv2.circle(erode,(i[0],i[1]),i[2],(255,255,255),2)
-                #cv2.circle(erode,(i[0],i[1]),2,(255,255,255),17)
+                cv2.circle(self.__imagem,(i[0],i[1]),i[2],(255,255,255),2)
+                cv2.circle(self.__imagem,(i[0],i[1]),2,(255,255,255),2)
             #inverter tonalidade
             #erode = cv2.bitwise_not(erode)
-            cv2.imshow('1', img)
-            cv2.imshow('2', erode)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+            
             return self.analiseReta(erode)
 
 

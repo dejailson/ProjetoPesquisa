@@ -103,14 +103,15 @@ class CadastrarAmostra():
             self.aquisicao = Aquisicao(url=self.caminho_img)
 
     def mudarTela(self, var=None ):
-        self.amostra = Amostras(nomeProjeto=self.recurso.projeto.get().strip(), 
-                                            identificacao=self.identificacao.get().strip(), 
-                                            numFemeas=self.NFemea.get().strip(),
-                                            CCT=self.cefalotorax.get().strip(),
-                                            CA=self.abdomem.get().strip(),
-                                            T=self.telson.get().strip())
+        if var != 2:
+            self.amostra = Amostras(nomeProjeto=self.recurso.projeto.get().strip(), 
+                                                identificacao=self.identificacao.get().strip(), 
+                                                numFemeas=self.NFemea.get().strip(),
+                                                CCT=self.cefalotorax.get().strip(),
+                                                CA=self.abdomem.get().strip(),
+                                                T=self.telson.get().strip())
         from tela.Amostras import Amostras as tela_amostras
-        if var == 1 and 2:
+        if var == 1 and var == 2:
             self.root.destroy()
             tela_amostras()
 

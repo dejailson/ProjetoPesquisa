@@ -13,12 +13,11 @@ class ProcessamentoDeImagem:
         self.AM = AM()
         self.Medidas = MO()
 
-    def cortaro(self, imagem):
-        #self.imge = Image.fromarray(imagem)
-        
+
         return self.imge
 
     def PreProcessamento(self, imagem):
+        #imagem = cv2.GaussianBlur(imagem, (5, 5))
         imagem = self.AM.desenharMascara(imagem)
         imagem [:, :,0] = cv2.equalizeHist(imagem[:, :,0])
         imagem = cv2.cvtColor(imagem, cv2.COLOR_BGR2BGRA)

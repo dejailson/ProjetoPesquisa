@@ -87,10 +87,7 @@ class MedidasOvos:
 
 
         def cobrirCirculos(self):
-            img = self.__imagem
-            rangomax = np.array([255, 180, 122, 255]) # 119, 148, 195 B, G, R
-            rangomin = np.array([122,   122, 122, 255])#61, 112,   
-            mask = cv2.inRange(img, rangomin,  rangomax)
+            img = self.__imagem 
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             _, threshold = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
 

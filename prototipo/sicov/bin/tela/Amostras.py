@@ -2,6 +2,7 @@ import tkinter as t
 from tkinter import ttk
 from util.binario import Dados as dd
 from PIL import ImageTk,Image
+from util.Search import Search
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
 from tela.cadastrarAmostra import CadastrarAmostra as CA
 from config.Parametro import BANCO_DADOS
@@ -33,7 +34,7 @@ class Amostras:
         self.msg3 = t.Label(self.root, text='Projeto', font=param.FONTE_OUTRA[2])
         self.msg3.place(x=12, y=150)
         self.recurso.monstarListaProjetos(root=self.root, tela='Amostra')
-        self.botao_pesquisar = t.Button(self.root, text=' Pesquisar ', font=param.FONTE_PADRAO).place(x=570, y=149)#sem ação
+        self.botao_pesquisar = t.Button(self.root, text=' Pesquisar ', font=param.FONTE_PADRAO, comman= lambda: self.search()).place(x=570, y=149)#sem ação
 
         self.botao_adicionar = t.Button(self.root, text='+ Incluir Novo', font=param.FONTE_OUTRA[1], command=lambda:self.mudarTela())
         self.botao_adicionar.place(x=580, y=265)
@@ -73,7 +74,17 @@ class Amostras:
         self.button2 = t.Button(self.root, text='Voltar', command=lambda:self.mudarTela(var=1))
         self.button2.place(x=570, y=450, width=100)
 
+        self.visualizarAmo = t.Button(self.root, text='Visualizar Todas as Amostras', 
+                                font='arial 10 bold', 
+                                command=lambda:self.visu())
+        self.visualizarAmo.place(x=20, y=450)
+
         self.root.mainloop()
+    
+    def search(self):
+        self.lista = [self.Identificacao.get().strip(), self.recurso.projeto.get().strip()]
+        self.visu(lista=Search(amostra=self.lista))
+
             
     def red(self, imge):
         self.basewidth = 25
@@ -82,23 +93,36 @@ class Amostras:
         imge = imge.resize((self.basewidth,self.hsize), Image.ANTIALIAS)
         return imge
 
-    def visu(self, numero=None):#incompleto
-        self.dados = shelve.open(BANCO_DADOS)
-        self.lista = self.dados['Amostra']
-        self.lista2 = self.dados['Projeto']
-        self.cont = 1
-        for c in self.lista:
-            self.list = [self.cont]
-            self.list.append(c.nomeProjeto)
-            self.list.append(c.identificacao)
-            for i in self.lista2:
-                if i.nome == c.nomeProjeto:
-                    for y in i.pesquisadores:
-                        if y.coordenador == 'Sim':
-                            self.list.append(y.nome)
-            self.tree.insert("", 'end',values=self.list,  tag='1')
-            self.cont += 1
-        self.dados.close()
+    def visu(self, lista=None):#incompleto
+        posicao = self.tree.get_children()
+        if len(posicao) > 0:
+            for c in range(len(posicao)):
+                self.tree.delete(posicao[c])
+        if lista == None:
+            self.dados = shelve.open(BANCO_DADOS)
+            self.lista = self.dados['Amostra']
+            self.lista2 = self.dados['Projeto']
+            self.cont = 1
+            for c in self.lista:
+                self.list = [self.cont]
+                self.list.append(c.nomeProjeto)
+                self.list.append(c.identificacao)
+                for i in self.lista2:
+                    if i.nome == c.nomeProjeto:
+                        for y in i.pesquisadores:
+                            if y.coordenador == 'Sim':
+                                self.list.append(y.nome)
+                self.tree.insert("", 'end',values=self.list,  tag='1')
+                self.cont += 1
+            self.dados.close()
+        else:
+            cont = 0
+            if len(lista) > 0:
+                for c in lista:
+                    cont += 1
+                    lista1 = [cont, c.nomeProjeto, c.identificacao, 'NADA']
+                    self.tree.insert("", 'end',values=lista1,  tag='1')
+
 
     def mudarTela(self, var=None):
         if var == 1:

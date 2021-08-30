@@ -9,17 +9,27 @@ class AplicarMascara:
     #img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     # detect circles
-    def detectarCirculos(self, img):
+    def detectarCirculos(self, img, num=None):
         gray = cv2.medianBlur(cv2.cvtColor(img, cv2.COLOR_RGB2GRAY), 5)
-        return np.uint16(np.around(cv2.HoughCircles(gray, \
-             cv2.HOUGH_GRADIENT, 1, 10, param1=75, param2=12, \
-             minRadius=0, maxRadius=0)))
+        if num == None:
+            img = np.uint16(np.around(cv2.HoughCircles(gray, \
+                cv2.HOUGH_GRADIENT, 1, 100, param1=50, param2=50, \
+                minRadius=0, maxRadius=0)))
+        else:
+            img = np.uint16(np.around(cv2.HoughCircles(gray, \
+                cv2.HOUGH_GRADIENT, 1, 45, param1=50, param2=50, \
+                minRadius=0, maxRadius=0)))
+        return img
 
     # draw mask
     def desenharMascara(self, img):
         mask = np.full((img.shape[0], img.shape[1]), 0, dtype=np.uint8)
-        for i in self.detectarCirculos(img)[0, :]:
-            cv2.circle(mask, (i[0], i[1]), i[2], (255, 0, 0), -1)
+        try:
+            for i in self.detectarCirculos(img)[0, :]:
+                cv2.circle(mask, (i[0], i[1]), i[2], (255, 0, 0), -1)
+        except:
+            for i in self.detectarCirculos(img, 1)[0, :]:
+                cv2.circle(mask, (i[0], i[1]), i[2], (255, 0, 0), -1)
         return self.obtendoMascaras(img, mask)
 
 

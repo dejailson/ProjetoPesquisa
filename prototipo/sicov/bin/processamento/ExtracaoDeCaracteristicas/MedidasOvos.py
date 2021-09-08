@@ -104,9 +104,11 @@ class MedidasOvos:
             circles = self.identificarCirculos(erode)
             for i in circles[0,:]:
                 #circulo externo
-                cv2.circle(erode,(i[0],i[1]),i[2],(255,255,255),2)
-                cv2.circle(self.__imagem,(i[0],i[1]),i[2],(255,255,255),2)
-                cv2.circle(self.__imagem,(i[0],i[1]),2,(255,255,255),2)
+                if i[2] >= 8:
+                    cv2.circle(erode,(i[0],i[1]),i[2],(255,255,255),2)
+                    cv2.circle(self.__imagem,(i[0],i[1]),i[2],(255, 0, 0, 255),2)
+                    cv2.circle(self.__imagem,(i[0],i[1]),2,(255, 0, 0, 255),2)
+                print(i[2])
             #inverter tonalidade
             #erode = cv2.bitwise_not(erode)
             

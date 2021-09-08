@@ -96,7 +96,8 @@ class Projeto():
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Projeto']
             posicao = self.tree.selection()[0]
-            projeto = self.lista[int(posicao[-1])-1]
+            posicao = self.tree.get_children().index(posicao)
+            projeto = self.lista[posicao]
             self.dados.close()
             from tela.CadastrarProjeto import cadastrarProjeto
             self.pro.destroy()
@@ -126,7 +127,8 @@ class Projeto():
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Projeto']
             posicao = self.tree.selection()[0]
-            projeto = self.lista[int(posicao[-1])-1]
+            posicao = self.tree.get_children().index(posicao)
+            projeto = self.lista[posicao]
             self.dados.close()
             cadastrarProjeto(lista=projeto)
 
@@ -137,7 +139,8 @@ class Projeto():
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Projeto']
             posicao = self.tree.selection()[0]
-            self.lista.remove(self.lista[int(posicao[-1])-1])
+            posicao = self.tree.get_children().index(posicao)
+            self.lista.remove(self.lista[posicao])
             self.tree.delete(posicao)
             self.dados['Projeto'] = self.lista
             self.dados.close()
@@ -149,9 +152,8 @@ class Projeto():
 
     def visu(self, lista=None):
         posicao = self.tree.get_children()
-        if len(posicao) > 0:
-            for c in range(len(posicao)):
-                self.tree.delete(posicao[c])
+        for c in range(len(posicao)):
+            self.tree.delete(posicao[c])
         if lista == None:
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Projeto']

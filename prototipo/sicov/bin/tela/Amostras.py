@@ -101,10 +101,15 @@ class Amostras:
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Amostra']
             posicao = self.tree.selection()[0]
-            amostraV = self.lista[int(posicao[-1])-1]
-            self.cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS+'\\'+amostraV.nomeProjeto+'_'+amostraV.identificacao)
+            posicao = self.tree.get_children().index(posicao)
+            print(posicao)
+            amostraV = self.lista[posicao]
+            self.cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS+'\\'+ amostraV.identificacao +'_'+amostraV.nomeProjeto+'.png')
             self.dados.close()
-            print(self.cam)
+            from tela.Relatorio_do_Processamento import Relatorio as rel
+            self.root.destroy()
+            
+            rel(url=self.cam, amostra=amostraV, ver=1)
 
     def remover(self):
         if self.tree.selection() == ():
@@ -113,7 +118,9 @@ class Amostras:
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Amostra']
             posicao = self.tree.selection()[0]
-            self.lista.remove(self.lista[int(posicao[-1])-1])
+            posicao = self.tree.get_children().index(posicao)
+            self.lista.remove(self.lista[posicao])
+            posicao = self.tree.selection()[0]
             self.tree.delete(posicao)
             self.dados['Amostra'] = self.lista
             self.dados.close()
@@ -121,9 +128,8 @@ class Amostras:
 
     def visu(self, lista=None):#incompleto
         posicao = self.tree.get_children()
-        if len(posicao) > 0:
-            for c in range(len(posicao)):
-                self.tree.delete(posicao[c])
+        for c in range(len(posicao)):
+            self.tree.delete(posicao[c])
         if lista == None:
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Amostra']
@@ -153,7 +159,6 @@ class Amostras:
                             for g in y.pesquisadores:
                                 if g.coordenador == 'Sim':
                                     lista1.append(y.nome)
-
                     self.tree.insert("", 'end',values=lista1,  tag='1')
         self.dados.close()
 

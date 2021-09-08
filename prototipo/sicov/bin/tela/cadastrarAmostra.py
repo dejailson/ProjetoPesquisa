@@ -105,8 +105,10 @@ class CadastrarAmostra():
                 self.lista.append(self.amostra)
                 self.dados['Amostra'] = self.lista
                 self.dados.close()
-                i = cv2.imread(self.url)
-                cv2.imread(self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS)+'\\'+self.identificacao.get().strip()+'_'+self.recurso.projeto.get().strip()+'.png', i)
+                i = cv2.imread(self.caminho_img)
+                print(self.url)
+                cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS)+'\\'+self.identificacao.get().strip()+'_'+self.recurso.projeto.get().strip()+'.png'
+                cv2.imwrite(cam, i)
             except:
                 print('Erro!')
             self.mudarTela(var=1)

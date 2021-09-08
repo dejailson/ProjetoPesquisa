@@ -11,8 +11,9 @@ from util.modelo.camarao import Camarao
 import numpy as np
 import cv2
 class Relatorio():
-    def __init__(self, url, amostra):
+    def __init__(self, url, amostra, ver=None):
         self.Processamento = ProDI()
+        self.ver = ver
         self.url = url
         
         self.root = t.Tk()
@@ -105,8 +106,12 @@ class Relatorio():
 
     def voltar(self):
         self.root.destroy()
-        from tela.cadastrarAmostra import CadastrarAmostra as CA 
-        CA(im=self.url, caminho=self.url, amostra=self.amostra)
+        if self.ver == None:
+            from tela.cadastrarAmostra import CadastrarAmostra as CA 
+            CA(im=self.url, caminho=self.url, amostra=self.amostra)
+        else:
+            from tela.Amostras import Amostras as tela_amostras
+            tela_amostras()
 
 
 

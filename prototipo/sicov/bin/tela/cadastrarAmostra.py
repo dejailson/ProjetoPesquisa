@@ -9,7 +9,7 @@ from tela.Relatorio_do_Processamento import Relatorio as rel
 from processamento.aquisicao_img import Aquisicao
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
 from util.modelo.amostras import Amostras
-from config.Parametro import BANCO_DADOS
+from config.Parametro import BANCO_DADOS, SUBPASTA_IMGS_AMOSTRAS 
 import shelve
 global amostra
 class CadastrarAmostra():
@@ -34,7 +34,7 @@ class CadastrarAmostra():
         if im != None:
             self.procurarB(num=im, url=caminho)
         self.procurar = t.Button(self.root, text='Procurar', command=lambda:self.procurarB()).place(x=12, y=360, width=350)
-
+        self.url = caminho
         self.recurso = gr()
 
 
@@ -105,6 +105,8 @@ class CadastrarAmostra():
                 self.lista.append(self.amostra)
                 self.dados['Amostra'] = self.lista
                 self.dados.close()
+                i = cv2.imread(self.url)
+                cv2.imread(self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS)+'\\'+self.identificacao.get().strip()+'_'+self.recurso.projeto.get().strip()+'.png', i)
             except:
                 print('Erro!')
             self.mudarTela(var=1)

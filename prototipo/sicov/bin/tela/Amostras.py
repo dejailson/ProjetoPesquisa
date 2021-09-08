@@ -5,8 +5,9 @@ from PIL import ImageTk,Image
 from util.Search import Search
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
 from tela.cadastrarAmostra import CadastrarAmostra as CA
-from config.Parametro import BANCO_DADOS
+from config.Parametro import BANCO_DADOS, SUBPASTA_IMGS_AMOSTRAS
 import config.Parametro as param
+from tkinter import messagebox
 import shelve
 
 global listaG
@@ -63,13 +64,13 @@ class Amostras:
         self.img_olhos = Image.open(self.caminho_olhos)
         self.resu = self.red(self.img_olhos)
         self.imagem_olhos = ImageTk.PhotoImage(self.resu)
-        self.imagem_olhos_L = t.Button(image=self.imagem_olhos).place(x=610, y=315)
+        self.imagem_olhos_L = t.Button(image=self.imagem_olhos, command=lambda: self.viewAmostra()).place(x=610, y=315)
 
         self.caminho_lixeira = self.recurso.carregarIconeLixeira()
         self.img_lixeira = Image.open(self.caminho_lixeira)
         self.resu = self.red(self.img_lixeira)
         self.imagem_lixeira = ImageTk.PhotoImage(self.resu)
-        self.imagem_lixeira_L = t.Button(image=self.imagem_lixeira).place(x=650, y=315)
+        self.imagem_lixeira_L = t.Button(image=self.imagem_lixeira, command=lambda: self.remover()).place(x=650, y=315)
 
         self.button2 = t.Button(self.root, text='Voltar', command=lambda:self.mudarTela(var=1))
         self.button2.place(x=570, y=450, width=100)
@@ -93,6 +94,31 @@ class Amostras:
         imge = imge.resize((self.basewidth,self.hsize), Image.ANTIALIAS)
         return imge
 
+    def viewAmostra(self):
+        if self.tree.selection() == ():
+            messagebox.showerror("Erro","Selecione uma Amostra!")
+        else:
+            self.dados = shelve.open(BANCO_DADOS)
+            self.lista = self.dados['Amostra']
+            posicao = self.tree.selection()[0]
+            amostraV = self.lista[int(posicao[-1])-1]
+            self.cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS+'\\'+amostraV.nomeProjeto+'_'+amostraV.identificacao)
+            self.dados.close()
+            print(self.cam)
+
+    def remover(self):
+        if self.tree.selection() == ():
+            messagebox.showerror("Erro","Selecione uma Amostra!")
+        else:
+            self.dados = shelve.open(BANCO_DADOS)
+            self.lista = self.dados['Amostra']
+            posicao = self.tree.selection()[0]
+            self.lista.remove(self.lista[int(posicao[-1])-1])
+            self.tree.delete(posicao)
+            self.dados['Amostra'] = self.lista
+            self.dados.close()
+            
+
     def visu(self, lista=None):#incompleto
         posicao = self.tree.get_children()
         if len(posicao) > 0:
@@ -114,14 +140,22 @@ class Amostras:
                                 self.list.append(y.nome)
                 self.tree.insert("", 'end',values=self.list,  tag='1')
                 self.cont += 1
-            self.dados.close()
         else:
             cont = 0
+            self.dados = shelve.open(BANCO_DADOS)
+            self.lista2 = self.dados['Projeto']
             if len(lista) > 0:
                 for c in lista:
                     cont += 1
-                    lista1 = [cont, c.nomeProjeto, c.identificacao, 'NADA']
+                    lista1 = [cont, c.nomeProjeto, c.identificacao]
+                    for y in self.lista2:
+                        if c.nomeProjeto == y.nome:
+                            for g in y.pesquisadores:
+                                if g.coordenador == 'Sim':
+                                    lista1.append(y.nome)
+
                     self.tree.insert("", 'end',values=lista1,  tag='1')
+        self.dados.close()
 
 
     def mudarTela(self, var=None):

@@ -13,9 +13,6 @@ class ProcessamentoDeImagem:
         self.AM = AM()
         self.Medidas = MO()
 
-
-        return self.imge
-
     def PreProcessamento(self, imagem):
         #imagem = cv2.GaussianBlur(imagem, (5, 5))
         imagem = self.AM.desenharMascara(imagem)

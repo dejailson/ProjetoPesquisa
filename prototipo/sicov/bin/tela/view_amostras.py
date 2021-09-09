@@ -14,7 +14,7 @@ class ViewAmostras():
         self.root.geometry('800x500')
         self.root.title('amostras')
         self.recurso = gr()
-        self.recurso.montarCaminhoRecurso(param.SUBPASTA_IMGS_AMOSTRAS)
+        self.root.iconbitmap(self.recurso.carregarIconeJanela())
         posicao = self.tree.get_children()
         
         self.dados = shelve.open(param.BANCO_DADOS)

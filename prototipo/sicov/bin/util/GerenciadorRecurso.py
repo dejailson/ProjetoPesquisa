@@ -28,6 +28,10 @@ class GerenciadorRecurso:
         imagem_fundo = os.path.join(param.SUBPASTA_FUNDO, param.IMAGEM_FUNDO)
         return self.montarCaminhoRecurso(imagem_fundo)
 
+    def carregarIconeJanela(self):
+        imagem_fundo = os.path.join(param.SUBPASTA_ICONE, param.ICONE_JANELA)
+        return self.montarCaminhoRecurso(imagem_fundo)
+
     def montarCaminhoRecurso(self, nomeRecurso):
         return os.path.join(self.DIRETORIO_RAIZ, param.PASTA_RECURSO,
                             param.PASTA_IMAGEM, nomeRecurso)

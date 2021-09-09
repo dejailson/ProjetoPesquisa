@@ -29,6 +29,7 @@ class cadastrarProjeto:
             for c in projeto.pesquisadores:
                 self.dados_membros.append(c)
         self.root = t.Tk()
+        self.root.iconbitmap(self.recurso.carregarIconeJanela())
         self.root.geometry("700x500")
         self.w1 = t.LabelFrame(self.root)
         self.w2 = t.LabelFrame(self.root)
@@ -122,6 +123,7 @@ class cadastrarProjeto:
             posicao = self.tree.selection()[0]
             lista = [self.dados_membros[int(posicao[-1])-1].matricula, self.dados_membros[int(posicao[-1])-1].nome]
         self.tela = t.Tk()
+        self.tela.iconbitmap(self.recurso.carregarIconeJanela())
         self.tela.geometry("400x300")
         self.tela.title('Cadastrar Participante')
 

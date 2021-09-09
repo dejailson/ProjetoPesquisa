@@ -28,6 +28,8 @@ class CadastrarAmostra():
         self.verificadorCam = 0
         self.dados_membros = []
         self.root = t.Tk()
+        self.recurso = gr()
+        self.root.iconbitmap(self.recurso.carregarIconeJanela())
         self.root.geometry("1000x400")
         self.root.title('Cadastro da Amostra')
         self.imagem = dd()
@@ -35,7 +37,6 @@ class CadastrarAmostra():
             self.procurarB(num=im, url=caminho)
         self.procurar = t.Button(self.root, text='Procurar', command=lambda:self.procurarB()).place(x=12, y=360, width=350)
         self.url = caminho
-        self.recurso = gr()
 
 
         self.msg1 = t.Label(self.root, text='Projeto ', font='arial 12 bold')

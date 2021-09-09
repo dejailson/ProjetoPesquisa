@@ -7,6 +7,7 @@ ICONE_LAPIS = 'lapis.jpg'
 ICONE_OLHO = 'olho.jpg'
 ICONE_LIXEIRA = 'lixeira.jpeg'
 IMAGEM_FUNDO = 'ovos.jpg'
+ICONE_JANELA = 'favicon.ico'
 FONTE_PADRAO = 'Arial 12 bold'
 FONTE_TITULO = 'Arial 20 bold'
 FONTE_OUTRA = ['Arial 9 bold', 'Arial 10 bold', 'Arial 14 bold', 'Arial 16 bold']

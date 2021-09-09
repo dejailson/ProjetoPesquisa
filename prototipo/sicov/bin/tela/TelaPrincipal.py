@@ -9,8 +9,16 @@ import config.Parametro as param
 class TelaPrincipal():
     def __init__(self):
         self.root = t.Tk()
+        self.binario = dd()
+        self.recurso = gr()
+        self.root.iconbitmap(self.recurso.carregarIconeJanela())
         self.root.geometry('800x500')
         self.root.title('Tela Inicial')
+        
+        #self.root.iconphoto(True, t.PhotoImage(file=self.recurso.carregarIconeJanela()))
+        
+        #self.root.tk.call('wm', 'iconphoto', self.root._w, t.PhotoImage(file=self.recurso.carregarIconeJanela()))
+        print(self.recurso.carregarIconeJanela())
         self.menu = t.Menu(self.root, tearoff=0)
         self.Menu = t.Menu(self.menu, tearoff=0)
         self.menu.add_command(label='Tela de Projeto',
@@ -24,8 +32,7 @@ class TelaPrincipal():
         self.titulo = t.Label(
             self.root, text='Software De Visão Computacional', font=param.FONTE_TITULO).pack()
         self.nada = t.Label(self.root, text='   ', font=param.FONTE_TITULO).pack()
-        self.binario = dd()
-        self.recurso = gr()
+        
         self.recurso.banco()
         self.nome_img = self.recurso.carregarImagemFundo()
         self.img = ImageTk.PhotoImage(Image.open(self.nome_img))

@@ -20,6 +20,8 @@ class Relatorio():
         self.root.geometry("1000x450")
         self.root.title('Relatório do Processamento')
         self.recurso = gr()
+        self.recurso = gr()
+        self.root.iconbitmap(self.recurso.carregarIconeJanela())
         imagem = cv2.imread(url)
         imagem, self.listaOvos = self.Processamento.ExtrairCaracteristicas(imagem)
 

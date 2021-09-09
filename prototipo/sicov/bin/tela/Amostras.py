@@ -15,6 +15,9 @@ listaG = []
 class Amostras:
     def __init__(self):
         self.root = t.Tk()
+        self.binario = dd()
+        self.recurso = gr()
+        self.root.iconbitmap(self.recurso.carregarIconeJanela())
         self.root.geometry("700x500")
         self.w1 = t.LabelFrame(self.root)
         self.w2 = t.LabelFrame(self.root)
@@ -22,9 +25,7 @@ class Amostras:
         self.w2.pack(fill="both", expand="yes", padx=10, pady=5)
         self.root.title('Amostras')
 
-        self.binario = dd()
-        self.recurso = gr()
-
+        
         self.msg1 = t.Label(self.root, text='Filtros', font=param.FONTE_OUTRA[0])
         self.msg1.place(x=30, y=0)
         self.msg2 = t.Label(self.root, text='Identificação', font=param.FONTE_OUTRA[3])

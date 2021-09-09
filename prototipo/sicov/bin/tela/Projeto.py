@@ -18,6 +18,7 @@ class Projeto():
         self.recurso = gr()
 
         self.pro = t.Tk()
+        self.pro.iconbitmap(self.recurso.carregarIconeJanela())
         self.pro.geometry("700x500")
         self.w1 = t.LabelFrame(self.pro)
         self.w2 = t.LabelFrame(self.pro)

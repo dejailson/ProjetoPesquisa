@@ -9,16 +9,13 @@ import config.Parametro as param
 class TelaPrincipal():
     def __init__(self):
         self.root = t.Tk()
+        self.root.configure(bg='white')
         self.binario = dd()
         self.recurso = gr()
         self.root.iconbitmap(self.recurso.carregarIconeJanela())
         self.root.geometry('800x500')
-        self.root.title('Tela Inicial')
-        
-        #self.root.iconphoto(True, t.PhotoImage(file=self.recurso.carregarIconeJanela()))
-        
-        #self.root.tk.call('wm', 'iconphoto', self.root._w, t.PhotoImage(file=self.recurso.carregarIconeJanela()))
-        print(self.recurso.carregarIconeJanela())
+        self.root.title('SisCov')
+        self.root.resizable(0, 0) 
         self.menu = t.Menu(self.root, tearoff=0)
         self.Menu = t.Menu(self.menu, tearoff=0)
         self.menu.add_command(label='Tela de Projeto',
@@ -30,8 +27,8 @@ class TelaPrincipal():
         self.Menu.add_cascade(label='Informações', menu=self.menu)
         self.root.config(menu=self.Menu)
         self.titulo = t.Label(
-            self.root, text='Software De Visão Computacional', font=param.FONTE_TITULO).pack()
-        self.nada = t.Label(self.root, text='   ', font=param.FONTE_TITULO).pack()
+            self.root, text='Sistema de Contagem de Ovos', font=param.FONTE_TITULO, bg='white').pack()
+        self.nada = t.Label(self.root, text='   ', font=param.FONTE_TITULO, bg='white').pack()
         
         self.recurso.banco()
         self.nome_img = self.recurso.carregarImagemFundo()

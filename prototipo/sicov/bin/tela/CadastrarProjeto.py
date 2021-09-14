@@ -12,24 +12,34 @@ from util.GerenciadorRecurso import GerenciadorRecurso as gr
 import re
 from config.Parametro import BANCO_DADOS
 
-
 class cadastrarProjeto:
     def __init__(self, projeto=None):
         self.recurso = gr()
+        try:
+            if self.coordenadorT != None:
+                self.coordenadorT = self.coordenadorT
+        except AttributeError:
+            self.coordenadorT = None
+        
+        
+
         self.projetoNone = projeto
         self.nomePadrao = ''
         self.dataPadrao = '10082021'
         self.descricaoPadrao = ''
         self.dados_membros = []
+        self.validarSimNao = 0
         if self.projetoNone != None:
             self.nomePadrao = self.projetoNone.nome
             self.dataPadrao = self.projetoNone.data.split('/')
             self.dataPadrao = self.dataPadrao[0] + self.dataPadrao[1] + self.dataPadrao[2]
             self.descricaoPadrao = self.projetoNone.descricao
+            self.validarSimNao = 1
             for c in projeto.pesquisadores:
                 self.dados_membros.append(c)
         self.root = t.Tk()
         self.root.iconbitmap(self.recurso.carregarIconeJanela())
+        self.root.resizable(0, 0)
         self.root.geometry("700x500")
         self.w1 = t.LabelFrame(self.root)
         self.w2 = t.LabelFrame(self.root)
@@ -39,7 +49,7 @@ class cadastrarProjeto:
         
             
         
-        self.validarSimNao = 0
+        
         self.cont = 1
 
         self.msg1 = t.Label(self.root, text='Dados do Projeto',
@@ -123,6 +133,7 @@ class cadastrarProjeto:
             posicao = self.tree.selection()[0]
             lista = [self.dados_membros[int(posicao[-1])-1].matricula, self.dados_membros[int(posicao[-1])-1].nome]
         self.tela = t.Tk()
+        self.tela.resizable(0, 0)
         self.tela.iconbitmap(self.recurso.carregarIconeJanela())
         self.tela.geometry("400x300")
         self.tela.title('Cadastrar Participante')
@@ -162,7 +173,9 @@ class cadastrarProjeto:
         self.mensagem4.place(x=12, y=170)
         self.listSimNao = ['Sim', 'Não']
         if self.validarSimNao == 1:
-            self.listSimNao = ['Não']
+            for pesquisadores in self.dados_membros:
+                if pesquisadores.coordenador == 'Sim':
+                    self.listSimNao = ['Não']
         self.coordenador = ttk.Combobox(self.tela, 
                                         values=self.listSimNao, width=42)
         self.coordenador.place(x=120, y=170)
@@ -183,53 +196,70 @@ class cadastrarProjeto:
         PJ()
 
     def salvar(self):
-        self.verCont = 0
-        self.ver = [self.Nome.get().strip(), self.Data.get().strip(), self.Descricao.get(1.0, t.END).strip(), self.dados_membros]
-        for i in self.ver:
-            if i == '':
-                self.verCont += 1
+        if self.Nome.get().strip() == '':
+                messagebox.showerror('Erro!', message='Adicione o nome do projeto')
+        elif self.coordenadorT != None:
+            self.verCont = 0
+            self.ver = [self.Nome.get().strip(), self.Data.get().strip(), self.Descricao.get(1.0, t.END).strip(), self.dados_membros]
+            for i in self.ver:
+                if i == '':
+                    self.verCont += 1
 
-        self.projeto = Projeto(nome=self.Nome.get().strip(), 
-                               data=self.Data.get().strip(), 
-                               descricao=self.Descricao.get(1.0, t.END).strip(), 
-                               pesquisadores=self.dados_membros)
-         
-        try: 
-            self.dados = shelve.open(BANCO_DADOS)
-            self.lista = self.dados['Projeto']
-            if self.projetoNone == None:
-                self.lista.append(self.projeto)
-            else:
-                for i in range(len(self.lista)):
-                    if self.lista[i].nome == self.projetoNone.nome:
-                        self.lista[i] = self.projeto
-                        break
-            self.dados['Projeto'] = self.lista
-            self.dados.close()
-        except:
-            print('Erro!')
-        self.mudarTela()
+            self.projeto = Projeto(nome=self.Nome.get().strip(), 
+                                data=self.Data.get().strip(), 
+                                descricao=self.Descricao.get(1.0, t.END).strip(), 
+                                pesquisadores=self.dados_membros,
+                                coordenador=self.coordenadorT)
+            
+            try: 
+                self.dados = shelve.open(BANCO_DADOS)
+                self.lista = self.dados['Projeto']
+                if self.projetoNone == None:
+                    self.lista.append(self.projeto)
+                else:
+                    for i in range(len(self.lista)):
+                        if self.lista[i].nome == self.projetoNone.nome:
+                            self.lista[i] = self.projeto
+                            break
+                self.dados['Projeto'] = self.lista
+                self.dados.close()
+            except:
+                print('Erro!')
+            self.mudarTela()
+        else:
+            messagebox.showerror('Erro!', message='Adicione um coordenador ao projeto')
 
     def adicionar(self, x=None):
-        self.Membro_Pesquisador = Pesquisador(nome=self.pesquisador.get().strip(), 
-                                                matricula=self.matricula.get().strip(), 
-                                                tipoMembro=self.membro.get().strip(), 
-                                                coordenador=self.coordenador.get().strip())
-        if x!=None:
-            if self.Membro_Pesquisador.coordenador == 'Sim':
-                self.validarSimNao = 1
-            self.dados_membros.append(self.Membro_Pesquisador)
-            self.lista = [self.Membro_Pesquisador.matricula, self.Membro_Pesquisador.nome, self.Membro_Pesquisador.tipoMembro, self.Membro_Pesquisador.coordenador]
-            #self.lista.insert(0, self.cont)
-            self.tree.insert("", 'end',values=self.lista,  tag='1')
-            self.cont  += 1
+        self.pesquisadorT = self.pesquisador.get().strip()
+        self.matriculaT = self.matricula.get().strip()
+        self.tipoMembroT = self.membro.get().strip()
+        self.coordenadorTela = self.coordenador.get().strip()
+        if self.pesquisadorT != '' and self.matriculaT != '' and \
+            self.tipoMembroT != '' and self.coordenadorTela != '':
+            self.Membro_Pesquisador = Pesquisador(nome=self.pesquisadorT, 
+                                                    matricula=self.matriculaT, 
+                                                    tipoMembro=self.tipoMembroT, 
+                                                    coordenador=self.coordenadorTela)
+            if x!=None:
+                if self.Membro_Pesquisador.coordenador == 'Sim':
+                    self.coordenadorT = self.Membro_Pesquisador
+                    self.validarSimNao = 1
+                self.dados_membros.append(self.Membro_Pesquisador)
+                self.lista = [self.Membro_Pesquisador.matricula, self.Membro_Pesquisador.nome, self.Membro_Pesquisador.tipoMembro, self.Membro_Pesquisador.coordenador]
+                #self.lista.insert(0, self.cont)
+                self.tree.insert("", 'end',values=self.lista,  tag='1')
+                self.cont  += 1
+            else:
+                posicao = 0
+                self.dados_membros[int(self.tree.selection()[0][-1])-1] = self.Membro_Pesquisador
+                for c in range(len(self.tree.get_children())):
+                    self.tree.delete(self.tree.get_children()[0])
+                self.visu()
+            self.tela.destroy()
         else:
-            posicao = 0
-            self.dados_membros[int(self.tree.selection()[0][-1])-1] = self.Membro_Pesquisador
-            for c in range(len(self.tree.get_children())):
-                self.tree.delete(self.tree.get_children()[0])
-            self.visu()
-        self.tela.destroy()
+            self.tela.destroy()
+            messagebox.showerror('Erro!', message='Preenchar todos os campos!')
+            
 
         
 
@@ -238,7 +268,8 @@ class cadastrarProjeto:
             messagebox.showerror("Erro","Selecione um Membro!")
         else:
             posicao = self.tree.selection()[0]
-            pesqui = self.dados_membros[int(posicao[-1])-1]
+            posicao = self.tree.get_children().index(posicao)
+            pesqui = self.dados_membros[posicao]
             self.tela_Cad()
     
     def remover(self):

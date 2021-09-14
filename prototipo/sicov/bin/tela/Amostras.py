@@ -18,6 +18,7 @@ class Amostras:
         self.binario = dd()
         self.recurso = gr()
         self.root.iconbitmap(self.recurso.carregarIconeJanela())
+        self.root.resizable(0, 0) 
         self.root.geometry("700x500")
         self.w1 = t.LabelFrame(self.root)
         self.w2 = t.LabelFrame(self.root)
@@ -103,7 +104,6 @@ class Amostras:
             self.lista = self.dados['Amostra']
             posicao = self.tree.selection()[0]
             posicao = self.tree.get_children().index(posicao)
-            print(posicao)
             amostraV = self.lista[posicao]
             self.cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS+'\\'+ amostraV.identificacao +'_'+amostraV.nomeProjeto+'.png')
             self.dados.close()
@@ -117,9 +117,14 @@ class Amostras:
             messagebox.showerror("Erro","Selecione uma Amostra!")
         else:
             self.dados = shelve.open(BANCO_DADOS)
-            self.lista = self.dados['Amostra']
+            self.lista = self.dados['Projeto']
             posicao = self.tree.selection()[0]
             posicao = self.tree.get_children().index(posicao)
+            self.cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS+'\\'+ self.lista[posicao].identificacao +'_'+self.lista[posicao].nomeProjeto+'.png')
+            try:
+                self.recurso.excluirImagem(self.cam)
+            except FileNotFoundError:
+                pass
             self.lista.remove(self.lista[posicao])
             posicao = self.tree.selection()[0]
             self.tree.delete(posicao)
@@ -127,40 +132,22 @@ class Amostras:
             self.dados.close()
             
 
-    def visu(self, lista=None):#incompleto
+    def visu(self, lista=None):
         posicao = self.tree.get_children()
         for c in range(len(posicao)):
             self.tree.delete(posicao[c])
+        self.dados = shelve.open(BANCO_DADOS)
         if lista == None:
-            self.dados = shelve.open(BANCO_DADOS)
-            self.lista = self.dados['Amostra']
-            self.lista2 = self.dados['Projeto']
-            self.cont = 1
-            for c in self.lista:
-                self.list = [self.cont]
-                self.list.append(c.nomeProjeto)
-                self.list.append(c.identificacao)
-                for i in self.lista2:
-                    if i.nome == c.nomeProjeto:
-                        for y in i.pesquisadores:
-                            if y.coordenador == 'Sim':
-                                self.list.append(y.nome)
-                self.tree.insert("", 'end',values=self.list,  tag='1')
-                self.cont += 1
+            self.lista = self.dados['Projeto']
         else:
-            cont = 0
-            self.dados = shelve.open(BANCO_DADOS)
-            self.lista2 = self.dados['Projeto']
-            if len(lista) > 0:
-                for c in lista:
-                    cont += 1
-                    lista1 = [cont, c.nomeProjeto, c.identificacao]
-                    for y in self.lista2:
-                        if c.nomeProjeto == y.nome:
-                            for g in y.pesquisadores:
-                                if g.coordenador == 'Sim':
-                                    lista1.append(y.nome)
-                    self.tree.insert("", 'end',values=lista1,  tag='1')
+            self.lista = lista
+        for projeto in self.lista:
+            self.cont = 1
+            if len(projeto.amostras) > 0:
+                for amostra in projeto.amostras:
+                    self.list = [self.cont, projeto.nome, amostra.identificacao, projeto.coordenador.nome]
+                    self.tree.insert("", 'end',values=self.list,  tag='1')
+                    self.cont += 1                
         self.dados.close()
 
 

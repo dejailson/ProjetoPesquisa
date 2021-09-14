@@ -1,25 +1,35 @@
 from util.binario import Dados as dd
+from util.modelo.projeto import Projeto
 from config.Parametro import BANCO_DADOS
 import shelve
 
 def Search(amostra=None, projeto=None):
+    AmostraDef = amostra
+    ProjetoDef = projeto
     dados = shelve.open(BANCO_DADOS)
     bancoInformacoes = []
-    if amostra != None:
-        listaAmostra = dados['Amostra']
-        for lista in listaAmostra:
-            if lista.identificacao in amostra[0] or (lista.nomeProjeto == amostra[1] and amostra[0] == ''):
-                bancoInformacoes.append(lista)
-                break
+    listaProjetos = dados['Projeto']
+    if AmostraDef != None: 
+        for projeto in listaProjetos:
+            if projeto.nome == amostra[1] and amostra[0] == '':
+                bancoInformacoes.append(projeto) 
+            else:
+                if projeto.nome.lower() == AmostraDef[1].lower():
+                    for amostra in projeto.amostras:
+                        if AmostraDef[0].lower() in amostra.identificacao.lower():
+                            bancoInformacoes.append(Projeto(nome=projeto.nome,
+                                                        data=projeto.data,
+                                                        descricao=projeto.descricao,
+                                                        pesquisadores=projeto.pesquisadores,
+                                                        coordenador=projeto.coordenador))
+                            bancoInformacoes[0].setAmostra(amostra)
+                            break
     else:
         listaProjeto = dados['Projeto']
-        for lista in listaProjeto:
-            for c in lista.pesquisadores:
-                if c.coordenador == "Sim":
-                    coordenador = c.nome
-            if (projeto[0] in lista.nome and coordenador == projeto[2] and projeto[1] == lista.data) \
-                or (projeto[0] == lista.nome or projeto[2] == coordenador or projeto[1] == lista.data):
-                    bancoInformacoes.append(lista)
+        for projeto in listaProjeto:
+            if (ProjetoDef[0].lower() in projeto.nome.lower() and projeto.coordenador.nome.lower() == ProjetoDef[2].lower() and ProjetoDef[1]== projeto.data) \
+                or (ProjetoDef[0].lower() == projeto.nome.lower() or ProjetoDef[2].lower() == projeto.coordenador.nome.lower() or ProjetoDef[1] == projeto.data):
+                    bancoInformacoes.append(projeto)
                     break
     return bancoInformacoes
 

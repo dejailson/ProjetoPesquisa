@@ -17,6 +17,7 @@ class Relatorio():
         self.url = url
         
         self.root = t.Tk()
+        self.root.resizable(0, 0)
         self.root.geometry("1000x450")
         self.root.title('Relatório do Processamento')
         self.recurso = gr()

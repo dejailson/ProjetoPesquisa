@@ -20,6 +20,7 @@ class Projeto():
         self.pro = t.Tk()
         self.pro.iconbitmap(self.recurso.carregarIconeJanela())
         self.pro.geometry("700x500")
+        self.pro.resizable(0, 0) 
         self.w1 = t.LabelFrame(self.pro)
         self.w2 = t.LabelFrame(self.pro)
         self.w1.pack(fill="both", expand="yes", padx=10, pady=5)
@@ -64,6 +65,11 @@ class Projeto():
         self.visu()
 
         self.tree.place(x=15, y=300, height = 115, width=540)
+
+        self.visualizarAmo = t.Button(self.pro, text='Visualizar Todos os Projetos', 
+                                font='arial 10 bold', 
+                                command=lambda:self.visu())
+        self.visualizarAmo.place(x=20, y=450)
 
         self.button2 = t.Button(self.pro, text='Voltar', 
                                 command=lambda:self.mudarTela(var=1))
@@ -137,11 +143,15 @@ class Projeto():
         if self.tree.selection() == ():
             messagebox.showerror("Erro","Selecione um Projeto!")
         else:
+            print('qualquer Coisa')
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Projeto']
             posicao = self.tree.selection()[0]
             posicao = self.tree.get_children().index(posicao)
+            print(posicao)
             self.lista.remove(self.lista[posicao])
+            posicao = self.tree.selection()[0]
+            print(posicao)
             self.tree.delete(posicao)
             self.dados['Projeto'] = self.lista
             self.dados.close()
@@ -163,9 +173,7 @@ class Projeto():
                 self.list = [self.cont]
                 self.list.append(c.nome)
                 self.list.append(c.data)
-                for d in c.pesquisadores:
-                    if d.coordenador == 'Sim':
-                        self.list.append(d.nome)
+                self.list.append(c.coordenador.nome)
                 self.tree.insert("", 'end',values=self.list,  tag='1')
                 self.cont += 1
             self.dados.close()
@@ -174,11 +182,9 @@ class Projeto():
             if len(lista) > 0:
                 for c in lista:
                     cont += 1
-                    lista1 = [cont, c.nome, c.data]
-                    for d in c.pesquisadores:
-                        if d.coordenador == 'Sim':
-                            lista1.append(d.nome)
+                    lista1 = [cont, c.nome, c.data, c.coordenador.nome]
                     self.tree.insert("", 'end',values=lista1,  tag='1')
+
 
 
 

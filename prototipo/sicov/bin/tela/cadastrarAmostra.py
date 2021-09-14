@@ -31,6 +31,7 @@ class CadastrarAmostra():
         self.recurso = gr()
         self.root.iconbitmap(self.recurso.carregarIconeJanela())
         self.root.geometry("1000x400")
+        self.root.resizable(0, 0) 
         self.root.title('Cadastro da Amostra')
         self.imagem = dd()
         if im != None:
@@ -100,14 +101,16 @@ class CadastrarAmostra():
                                                 CA=self.abdomem.get().strip(),
                                                 T=self.telson.get().strip())
             amostra = self.amostra
-            try: 
+            try:
+                self.cont = 0 
                 self.dados = shelve.open(BANCO_DADOS)
-                self.lista = self.dados['Amostra']
-                self.lista.append(self.amostra)
-                self.dados['Amostra'] = self.lista
+                self.lista = self.dados['Projeto']
+                for projeto in self.lista:
+                    if projeto.nome == self.amostra.nomeProjeto:
+                        projeto.setAmostra(self.amostra)
+                self.dados['Projeto'] = self.lista
                 self.dados.close()
                 i = cv2.imread(self.caminho_img)
-                print(self.url)
                 cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS)+'\\'+self.identificacao.get().strip()+'_'+self.recurso.projeto.get().strip()+'.png'
                 cv2.imwrite(cam, i)
             except:

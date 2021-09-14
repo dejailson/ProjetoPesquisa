@@ -36,6 +36,9 @@ class GerenciadorRecurso:
         return os.path.join(self.DIRETORIO_RAIZ, param.PASTA_RECURSO,
                             param.PASTA_IMAGEM, nomeRecurso)
 
+    def excluirImagem(self, urlArquivo):
+        os.remove(urlArquivo)
+
     def monstarListaProjetos(self, root, tela=None):
         self.a = 0 
         self.b = 0 
@@ -69,6 +72,5 @@ class GerenciadorRecurso:
         self.bd = shelve.open(BANCO_DADOS)
         if 'Projeto' not in self.bd:
             self.bd['Projeto'] = []
-            self.bd['Amostra'] = []
             self.bd.close()
             

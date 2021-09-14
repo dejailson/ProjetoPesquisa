@@ -77,7 +77,6 @@ class MedidasOvos:
                     minr, minc, maxr, maxc = props.bbox
                     bx = (minc, maxc, maxc, minc, minc)
                     by = (minr, minr, maxr, maxr, minr)
-                    #print(f'bx - by = {y1}')
                     ax.plot(bx, by, '-b', linewidth=2.5)      
             return self.__imagem, self.listaOvos
         
@@ -108,7 +107,7 @@ class MedidasOvos:
                     cv2.circle(erode,(i[0],i[1]),i[2],(255,255,255),2)
                     cv2.circle(self.__imagem,(i[0],i[1]),i[2],(255, 0, 0, 255),2)
                     cv2.circle(self.__imagem,(i[0],i[1]),2,(255, 0, 0, 255),2)
-                print(i[2])
+
             #inverter tonalidade
             #erode = cv2.bitwise_not(erode)
             

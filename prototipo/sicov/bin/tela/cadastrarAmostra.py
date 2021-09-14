@@ -33,6 +33,12 @@ class CadastrarAmostra():
         self.root.geometry("1000x400")
         self.root.resizable(0, 0) 
         self.root.title('Cadastro da Amostra')
+        self.menu = t.Menu(self.root, tearoff=0)
+        self.Menu = t.Menu(self.menu, tearoff=0)
+        self.menu.add_command(label='Objeto Padrão',
+                              command=lambda: self.objetoPadrao())
+        self.Menu.add_cascade(label='Informações', menu=self.menu)
+        self.root.config(menu=self.Menu)
         self.imagem = dd()
         if im != None:
             self.procurarB(num=im, url=caminho)
@@ -164,3 +170,28 @@ class CadastrarAmostra():
                     messagebox.showerror("Erro","Escolha uma imagem!")
         except ValueError:
             messagebox.showerror('Erro', 'Preencha todos os campos corretamente!')
+
+    def objetoPadrao(self):
+        self.root.destroy()
+        self.tela = t.Tk()
+        self.tela.resizable(0, 0)
+        self.tela.iconbitmap(self.recurso.carregarIconeJanela())
+        self.tela.geometry("400x300")
+        self.tela.title('Cadastrar Participante')
+
+        self.msgInicial = t.Label(self.tela, text='Dimenção do objeto padrão', 
+                                  font='arial 14 bold').pack()
+
+        
+        self.separador = t.Label(self.tela, text='', font='arial 11 bold').pack()
+        self.labelLargura = t.Label(self.tela, text='Largura do Objeto', font='arial 11 bold').pack()
+        self.largura = t.Entry(self.tela, width=30, bord=2)
+        self.largura.pack()
+
+        self.separador = t.Label(self.tela, text='', font='arial 11 bold').pack()
+
+        self.labelAltura = t.Label(self.tela, text='Altura do Objeto', font='arial 11 bold').pack()
+        self.altura = t.Entry(self.tela, width=30, bord=2)
+        self.altura.pack()
+
+        self.tela.mainloop()

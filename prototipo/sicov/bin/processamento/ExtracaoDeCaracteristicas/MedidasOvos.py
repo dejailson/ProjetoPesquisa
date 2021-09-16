@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from PIL import ImageTk, Image
 
 from skimage.draw import ellipse
+from util.GerenciadorRecurso import GerenciadorRecurso as gr
 from processamento.SegmentadorDeImagem import SegmentadorDeImagem as sdi
 from skimage.transform import rotate
 from processamento.preparacao.util.ElementoEstruturante import\
@@ -29,15 +30,19 @@ class MedidasOvos:
         def __init__(self, imagem):
             super().__init__()
             self.__imagem = imagem
+            self.recurso = gr()
+            self.ListaCoordenadas = []
+            
 
         def executar(self):
             return processar(self._tarefas(), self.__imagem)
 
         def tamanho(self, x1, x2, y1, y2):
+            # 0 = x; 1 = y; 2 = raio 
             catetoAdj = x2 - x1
             catetoOps = y2 - y1
             tang = math.sqrt((catetoAdj**2) + (catetoOps**2))
-            return int(tang)
+            return tang
 
         def dimenssoesImagem(self, img):
             return img.shape[:2]
@@ -53,8 +58,10 @@ class MedidasOvos:
             label_img = label(img)
             regions = regionprops(label_img)
             self.listaOvos = []
+            largura, altura = img.shape[:2]
 
             fig, ax = plt.subplots()
+            ax.imshow(img, cmap=plt.cm.gray)
 
             for props in regions:
                 y0, x0 = props.centroid
@@ -65,7 +72,13 @@ class MedidasOvos:
                 y2 = y0 - math.cos(orientation) * 0.5 * props.major_axis_length
                 raio1 = self.tamanho(x0, x1, y0, y1)
                 raio2 = self.tamanho(x0, x2, y0, y2)
-                if raio1 > 5 and raio1 < 50 and raio2 > 5 and raio2 < 50:
+                if raio1 >= 5 and raio1 <= 25 and raio2 >= 5 and raio2 <= 25:
+                    listaR = self.recurso.getObjetoPadrao()
+                    alturaReal = listaR[1]
+                    alturaPixel = self.ListaCoordenadas[2]*2
+                    raio1 = (alturaReal * raio1) / alturaPixel
+                    raio2 = (alturaReal * raio2) / alturaPixel
+                    print(f'Raio1 = {raio1} | Raio2 = {raio2}')
                     egge = Ovulo(raio1, raio2)
                     self.listaOvos.append(egge)
                     ax.plot((x0, x1), (y0, y1), '-r', linewidth=2.5)
@@ -77,7 +90,10 @@ class MedidasOvos:
                     minr, minc, maxr, maxc = props.bbox
                     bx = (minc, maxc, maxc, minc, minc)
                     by = (minr, minr, maxr, maxr, minr)
-                    ax.plot(bx, by, '-b', linewidth=2.5)      
+                    ax.plot(bx, by, '-b', linewidth=2.5)
+                    ax.plot(bx, by, '-b', linewidth=2.5)
+
+            ax = 0    
             return self.__imagem, self.listaOvos
         
         def identificarCirculos(self, img):
@@ -101,15 +117,28 @@ class MedidasOvos:
                 .porAdaptacao(200, 3, 6)\
                 .executar()
             circles = self.identificarCirculos(erode)
+            cont = 0
+            raio11 = 0
+            raio22 = 0
             for i in circles[0,:]:
+                if cont == 0:
+                    self.ListaCoordenadas = i
+                    
+                cont = 1
                 #circulo externo
+                listaR = self.recurso.getObjetoPadrao()
                 if i[2] >= 8:
                     cv2.circle(erode,(i[0],i[1]),i[2],(255,255,255),2)
+                    cv2.circle(erode,(i[0],i[1]),2,(255, 0, 0, 255),12)
                     cv2.circle(self.__imagem,(i[0],i[1]),i[2],(255, 0, 0, 255),2)
                     cv2.circle(self.__imagem,(i[0],i[1]),2,(255, 0, 0, 255),2)
-
-            #inverter tonalidade
-            #erode = cv2.bitwise_not(erode)
+                    alturaReal = listaR[1]
+                    
+                    alturaPixel = self.ListaCoordenadas[2]*2
+                    print(i[2])
+                    raio11 = (alturaReal * raio11) / alturaPixel
+                    raio22 = (alturaReal * raio22) / alturaPixel
+                    #print(f'Raio1 = {raio11} | Raio2 = {raio22}')
             
             return self.analiseReta(erode)
 

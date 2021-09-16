@@ -81,7 +81,7 @@ class Relatorio():
             self.root, text='Média do Volume dos Ovos', font='arial 12 bold')
         self.msg6.place(x=400, y=200)
 
-        self.MVolumeOvos = t.Label(self.root, text=self.mediaMassaOvos, font=self.font, bg='white', relief="solid")
+        self.MVolumeOvos = t.Label(self.root, text=self.mediaMassaOvos + 'mm³', font=self.font, bg='white', relief="solid")
         self.MVolumeOvos.place(x=650, y=200, height=20,
                                relwidth=0.32, relheight=0.01)
 
@@ -90,7 +90,7 @@ class Relatorio():
         self.msg7.place(x=400, y=240)
         self.MediaFecundidade = str(self.camarao.MediaFecundidade).split('.')
         self.MediaFecundidade = self.MediaFecundidade[0] + '.' + self.MediaFecundidade[1][:2]
-        self.MFecundidade = t.Label(self.root, text=self.MediaFecundidade, font=self.font, bg='white', relief="solid")
+        self.MFecundidade = t.Label(self.root, text=self.MediaFecundidade + 'ovos/tamanho da fêmia', font=self.font, bg='white', relief="solid")
         self.MFecundidade.place(x=650, y=240, height=20,
                                 relwidth=0.32, relheight=0.01)
 
@@ -98,7 +98,7 @@ class Relatorio():
             self.root, text='Volume da Massa dos Ovos', font='arial 12 bold')
         self.msg8.place(x=400, y=280)
 
-        self.VMassaOvos = t.Label(self.root, text=self.volumeMassaOvos, font=self.font, bg='white', relief="solid")
+        self.VMassaOvos = t.Label(self.root, text=self.volumeMassaOvos + 'mm³', font=self.font, bg='white', relief="solid")
         self.VMassaOvos.place(x=650, y=280, height=20,
                               relwidth=0.32, relheight=0.01)
 

@@ -9,11 +9,13 @@ from tela.Relatorio_do_Processamento import Relatorio as rel
 from processamento.aquisicao_img import Aquisicao
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
 from util.modelo.amostras import Amostras
+from tela.ObjetoPadrao import ObjetoPadrao as ob
 from config.Parametro import BANCO_DADOS, SUBPASTA_IMGS_AMOSTRAS 
 import shelve
+
 global amostra
 class CadastrarAmostra():
-    def __init__(self, im=None, caminho=None, amostra=None):
+    def __init__(self, im=None, caminho=None, amostra=None): 
         self.identificacaoA =''
         self.numFemeaA = ''
         self.CCTA = ''
@@ -30,14 +32,14 @@ class CadastrarAmostra():
         self.root = t.Tk()
         self.recurso = gr()
         self.root.iconbitmap(self.recurso.carregarIconeJanela())
-        self.root.geometry("1000x400")
+        self.root.geometry("1000x410")
         self.root.resizable(0, 0) 
         self.root.title('Cadastro da Amostra')
         self.menu = t.Menu(self.root, tearoff=0)
         self.Menu = t.Menu(self.menu, tearoff=0)
         self.menu.add_command(label='Objeto Padrão',
-                              command=lambda: self.objetoPadrao())
-        self.Menu.add_cascade(label='Informações', menu=self.menu)
+                              command=lambda: ob())
+        self.Menu.add_cascade(label='Dimensão', menu=self.menu)
         self.root.config(menu=self.Menu)
         self.imagem = dd()
         if im != None:
@@ -123,7 +125,7 @@ class CadastrarAmostra():
                 print('Erro!')
             self.mudarTela(var=1)
         except ValueError:
-            messagebox.showerror('Erro', 'Preencha todos os campos!')
+            messagebox.showwarning('Atenção!', 'Preencha todos os campos!')
 
        
 
@@ -164,34 +166,11 @@ class CadastrarAmostra():
                         rel(url=self.caminho_img, amostra=self.amostra)
                         
                     else:
-                        messagebox.showerror("Erro","Escolha uma imagem!")
+                        messagebox.showwarning("Atenção!","Escolha uma imagem!")
                             
                 except AttributeError:
-                    messagebox.showerror("Erro","Escolha uma imagem!")
+                    messagebox.showwarning("Atenção!","Escolha uma imagem!")
         except ValueError:
-            messagebox.showerror('Erro', 'Preencha todos os campos corretamente!')
+            messagebox.showwarning('Atenção!', 'Preencha todos os campos corretamente!')
 
-    def objetoPadrao(self):
-        self.root.destroy()
-        self.tela = t.Tk()
-        self.tela.resizable(0, 0)
-        self.tela.iconbitmap(self.recurso.carregarIconeJanela())
-        self.tela.geometry("400x300")
-        self.tela.title('Cadastrar Participante')
-
-        self.msgInicial = t.Label(self.tela, text='Dimenção do objeto padrão', 
-                                  font='arial 14 bold').pack()
-
-        
-        self.separador = t.Label(self.tela, text='', font='arial 11 bold').pack()
-        self.labelLargura = t.Label(self.tela, text='Largura do Objeto', font='arial 11 bold').pack()
-        self.largura = t.Entry(self.tela, width=30, bord=2)
-        self.largura.pack()
-
-        self.separador = t.Label(self.tela, text='', font='arial 11 bold').pack()
-
-        self.labelAltura = t.Label(self.tela, text='Altura do Objeto', font='arial 11 bold').pack()
-        self.altura = t.Entry(self.tela, width=30, bord=2)
-        self.altura.pack()
-
-        self.tela.mainloop()
+    

@@ -72,5 +72,20 @@ class GerenciadorRecurso:
         self.bd = shelve.open(BANCO_DADOS)
         if 'Projeto' not in self.bd:
             self.bd['Projeto'] = []
+            self.bd['Objeto'] = []
             self.bd.close()
+
+    def setObjetoPadrao(self, largura, altura):
+        self.bd = shelve.open(BANCO_DADOS)
+        self.lista = self.bd['Objeto']
+        self.lista = [largura, altura]
+        self.bd['Objeto'] = self.lista
+        self.bd.close()
+
+    def getObjetoPadrao(self):
+        self.bd = shelve.open(BANCO_DADOS)
+        self.lista = self.bd['Objeto']
+        self.bd.close()
+        return self.lista
+        
             

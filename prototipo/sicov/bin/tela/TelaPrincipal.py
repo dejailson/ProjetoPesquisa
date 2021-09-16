@@ -5,6 +5,7 @@ from util.binario import Dados as dd
 from PIL import ImageTk, Image
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
 import config.Parametro as param
+from tela.ObjetoPadrao import ObjetoPadrao as ob
 
 class TelaPrincipal():
     def __init__(self):
@@ -22,6 +23,8 @@ class TelaPrincipal():
                               command=lambda: self.Pro())
         self.menu.add_command(label='Tela de Amostras',
                               command=lambda: self.Amo())
+        self.menu.add_command(label='Objeto Padrão',
+                              command=lambda: ob())
         self.menu.add_separator()
         self.menu.add_command(label='Fechar', command=lambda: self.root.quit())
         self.Menu.add_cascade(label='Informações', menu=self.menu)

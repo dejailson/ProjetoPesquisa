@@ -98,7 +98,7 @@ class Projeto():
 
     def editar(self):
         if self.tree.selection() == ():
-            messagebox.showerror("Erro","Selecione um Projeto!")
+            messagebox.showwarning("Erro!","Selecione um Projeto!")
         else:
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Projeto']
@@ -129,7 +129,7 @@ class Projeto():
 
     def viewProjeto(self):
         if self.tree.selection() == ():
-            messagebox.showerror("Erro","Selecione um Projeto!")
+            messagebox.showwarning("Erro!","Selecione um Projeto!")
         else:
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Projeto']
@@ -141,7 +141,7 @@ class Projeto():
 
     def remover(self):
         if self.tree.selection() == ():
-            messagebox.showerror("Erro","Selecione um Projeto!")
+            messagebox.showwarning("Erro!","Selecione um Projeto!")
         else:
             print('qualquer Coisa')
             self.dados = shelve.open(BANCO_DADOS)

@@ -197,7 +197,7 @@ class cadastrarProjeto:
 
     def salvar(self):
         if self.Nome.get().strip() == '':
-                messagebox.showerror('Erro!', message='Adicione o nome do projeto')
+                messagebox.showwarning('Erro!', message='Adicione o nome do projeto')
         elif self.coordenadorT != None:
             self.verCont = 0
             self.ver = [self.Nome.get().strip(), self.Data.get().strip(), self.Descricao.get(1.0, t.END).strip(), self.dados_membros]
@@ -227,7 +227,7 @@ class cadastrarProjeto:
                 print('Erro!')
             self.mudarTela()
         else:
-            messagebox.showerror('Erro!', message='Adicione um coordenador ao projeto')
+            messagebox.showwarning('Etenção!', message='Adicione um coordenador ao projeto')
 
     def adicionar(self, x=None):
         self.pesquisadorT = self.pesquisador.get().strip()
@@ -258,14 +258,14 @@ class cadastrarProjeto:
             self.tela.destroy()
         else:
             self.tela.destroy()
-            messagebox.showerror('Erro!', message='Preenchar todos os campos!')
+            messagebox.showwarning('Atenção!', message='Preenchar todos os campos!')
             
 
         
 
     def editarPesq(self):
         if self.tree.selection() == ():
-            messagebox.showerror("Erro","Selecione um Membro!")
+            messagebox.showwarning("Atenção","Selecione um Membro!")
         else:
             posicao = self.tree.selection()[0]
             posicao = self.tree.get_children().index(posicao)
@@ -275,7 +275,7 @@ class cadastrarProjeto:
     def remover(self):
         cont = 0
         if self.tree.selection() == ():
-            messagebox.showerror("Erro","Selecione um Membro!")
+            messagebox.showwarning("Atenção","Selecione um Membro!")
         else:
             posicao = self.tree.selection()[0]
             self.dados_membros.remove(self.dados_membros[int(posicao[-1])-1])

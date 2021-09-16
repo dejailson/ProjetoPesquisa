@@ -14,6 +14,7 @@ global listaG
 listaG = []
 class Amostras:
     def __init__(self):
+        self.listaAmostras = []
         self.root = t.Tk()
         self.binario = dd()
         self.recurso = gr()
@@ -120,19 +121,46 @@ class Amostras:
             self.lista = self.dados['Projeto']
             posicao = self.tree.selection()[0]
             posicao = self.tree.get_children().index(posicao)
-            self.cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS+'\\'+ self.lista[posicao].identificacao +'_'+self.lista[posicao].nomeProjeto+'.png')
+            amostraR = self.listaAmostras[posicao][1][2]
+            projetoR = self.listaAmostras[posicao][0]
+            searchLista = ['', projetoR]
+            projetoR = Search(projeto=[projetoR, '', ''])[0]
+            
             try:
+                self.cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS+'\\'+ projetoR.nome +'_'+amostraR+'.png')
                 self.recurso.excluirImagem(self.cam)
             except FileNotFoundError:
                 pass
-            self.lista.remove(self.lista[posicao])
+            for amostra in projetoR.amostras:
+                print(f'1 - {amostra.identificacao}')
+                if amostra.identificacao == amostraR:
+                    projetoR.amostras.remove(amostra)
+
+            for amostra in projetoR.amostras:
+                print(f'2 - {amostra.identificacao}')
+
+            for projetos in self.lista:
+                for amostra in projetos.amostras:
+                    print(f'1 - {amostra.identificacao}')
+
+            for projeto in self.lista:
+                if projeto.nome == projetoR.nome:
+                    projeto = projetoR
+                    print('t')
+
+            for projetos in self.lista:
+                for amostra in projetos.amostras:
+                    print(f'2 - {amostra.identificacao}')
+
             posicao = self.tree.selection()[0]
             self.tree.delete(posicao)
-            self.dados['Amostra'] = self.lista
+            self.dados['Projeto'] = self.lista
             self.dados.close()
+            self.root.destroy()
             
 
     def visu(self, lista=None):
+        listaAmostras = []
         posicao = self.tree.get_children()
         for c in range(len(posicao)):
             self.tree.delete(posicao[c])
@@ -146,8 +174,10 @@ class Amostras:
             if len(projeto.amostras) > 0:
                 for amostra in projeto.amostras:
                     self.list = [self.cont, projeto.nome, amostra.identificacao, projeto.coordenador.nome]
+                    listaAmostras.append(self.list)
                     self.tree.insert("", 'end',values=self.list,  tag='1')
-                    self.cont += 1                
+                    self.cont += 1
+                    self.listaAmostras.append([projeto.nome, self.list])
         self.dados.close()
 
 
@@ -157,6 +187,7 @@ class Amostras:
             from tela.TelaPrincipal import TelaPrincipal
             TelaPrincipal()
         else:
+            #messagebox.showerror
             self.root.destroy()
             CA()
 

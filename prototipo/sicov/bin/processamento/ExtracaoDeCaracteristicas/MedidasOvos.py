@@ -118,28 +118,16 @@ class MedidasOvos:
                 .executar()
             circles = self.identificarCirculos(erode)
             cont = 0
-            raio11 = 0
-            raio22 = 0
             for i in circles[0,:]:
                 if cont == 0:
-                    self.ListaCoordenadas = i
-                    
+                    self.ListaCoordenadas = i    
                 cont = 1
                 #circulo externo
-                listaR = self.recurso.getObjetoPadrao()
                 if i[2] >= 8:
                     cv2.circle(erode,(i[0],i[1]),i[2],(255,255,255),2)
                     cv2.circle(erode,(i[0],i[1]),2,(255, 0, 0, 255),12)
                     cv2.circle(self.__imagem,(i[0],i[1]),i[2],(255, 0, 0, 255),2)
                     cv2.circle(self.__imagem,(i[0],i[1]),2,(255, 0, 0, 255),2)
-                    alturaReal = listaR[1]
-                    
-                    alturaPixel = self.ListaCoordenadas[2]*2
-                    print(i[2])
-                    raio11 = (alturaReal * raio11) / alturaPixel
-                    raio22 = (alturaReal * raio22) / alturaPixel
-                    #print(f'Raio1 = {raio11} | Raio2 = {raio22}')
-            
             return self.analiseReta(erode)
 
 

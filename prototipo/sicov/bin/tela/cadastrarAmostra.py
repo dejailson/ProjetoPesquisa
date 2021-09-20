@@ -110,20 +110,24 @@ class CadastrarAmostra():
                                                 T=self.telson.get().strip())
             amostra = self.amostra
             try:
-                self.cont = 0 
-                self.dados = shelve.open(BANCO_DADOS)
-                self.lista = self.dados['Projeto']
-                for projeto in self.lista:
-                    if projeto.nome == self.amostra.nomeProjeto:
-                        projeto.setAmostra(self.amostra)
-                self.dados['Projeto'] = self.lista
-                self.dados.close()
-                i = cv2.imread(self.caminho_img)
-                cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS)+'\\'+self.identificacao.get().strip()+'_'+self.recurso.projeto.get().strip()+'.png'
-                cv2.imwrite(cam, i)
+                try:
+                    i = cv2.imread(self.caminho_img)
+                    cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS)+'\\'+self.identificacao.get().strip()+'_'+self.recurso.projeto.get().strip()+'.png'
+                    cv2.imwrite(cam, i)
+                    print(cam)
+                    self.cont = 0 
+                    self.dados = shelve.open(BANCO_DADOS)
+                    self.lista = self.dados['Projeto']
+                    for projeto in self.lista:
+                        if projeto.nome == self.amostra.nomeProjeto:
+                            projeto.setAmostra(self.amostra)
+                    self.dados['Projeto'] = self.lista
+                    self.dados.close()
+                    self.mudarTela(var=1)
+                except:
+                    messagebox.showwarning("Atenção!","Escolha uma imagem!")
             except:
-                print('Erro!')
-            self.mudarTela(var=1)
+                messagebox.showwarning("Atenção!","Dados não foram salvos corretamente!")
         except ValueError:
             messagebox.showwarning('Atenção!', 'Preencha todos os campos!')
 

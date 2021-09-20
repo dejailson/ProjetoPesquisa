@@ -5,6 +5,7 @@ from PIL import ImageTk,Image
 from util.Search import Search
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
 from tela.cadastrarAmostra import CadastrarAmostra as CA
+from util.modelo.amostras import Amostras
 from config.Parametro import BANCO_DADOS, SUBPASTA_IMGS_AMOSTRAS
 import config.Parametro as param
 from tkinter import messagebox
@@ -102,61 +103,49 @@ class Amostras:
             messagebox.showerror("Erro","Selecione uma Amostra!")
         else:
             self.dados = shelve.open(BANCO_DADOS)
-            self.lista = self.dados['Amostra']
+            self.lista = self.dados['Projeto']
             posicao = self.tree.selection()[0]
             posicao = self.tree.get_children().index(posicao)
-            amostraV = self.lista[posicao]
-            self.cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS+'\\'+ amostraV.identificacao +'_'+amostraV.nomeProjeto+'.png')
+            amostraR = self.listaAmostras[posicao][1]
+            projetoR = self.listaAmostras[posicao][0]
+            print(projetoR.nome)
+            try:
+                self.cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS+'\\'+ amostraR.identificacao +'_'+ projetoR.nome +'.png')
+                from tela.Relatorio_do_Processamento import Relatorio as rel
+                self.root.destroy()
+                rel(url=self.cam, amostra=amostraR, ver=None)
+            except FileNotFoundError:
+                messagebox.showerror("Erro!","A imagem da Amostra não se encontra mais salva no sistema de arquivo.")
             self.dados.close()
-            from tela.Relatorio_do_Processamento import Relatorio as rel
-            self.root.destroy()
-            
-            rel(url=self.cam, amostra=amostraV, ver=1)
 
     def remover(self):
         if self.tree.selection() == ():
-            messagebox.showerror("Erro","Selecione uma Amostra!")
+            messagebox.showwarning("Atenção!","Selecione uma Amostra!")
         else:
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Projeto']
             posicao = self.tree.selection()[0]
             posicao = self.tree.get_children().index(posicao)
-            amostraR = self.listaAmostras[posicao][1][2]
+            amostraR = self.listaAmostras[posicao][1]
             projetoR = self.listaAmostras[posicao][0]
-            searchLista = ['', projetoR]
-            projetoR = Search(projeto=[projetoR, '', ''])[0]
-            
+            projetoR = Search(projeto=[projetoR.nome, '', ''])[0]
             try:
-                self.cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS+'\\'+ projetoR.nome +'_'+amostraR+'.png')
-                self.recurso.excluirImagem(self.cam)
+                self.cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS+'\\'+ amostraR.identificacao +'_'+ projetoR.nome  +'.png')
             except FileNotFoundError:
                 pass
             for amostra in projetoR.amostras:
                 print(f'1 - {amostra.identificacao}')
-                if amostra.identificacao == amostraR:
+                if amostra.identificacao == amostraR.identificacao:
                     projetoR.amostras.remove(amostra)
-
-            for amostra in projetoR.amostras:
-                print(f'2 - {amostra.identificacao}')
-
-            for projetos in self.lista:
-                for amostra in projetos.amostras:
-                    print(f'1 - {amostra.identificacao}')
-
+            cont = 0
             for projeto in self.lista:
                 if projeto.nome == projetoR.nome:
-                    projeto = projetoR
-                    print('t')
-
-            for projetos in self.lista:
-                for amostra in projetos.amostras:
-                    print(f'2 - {amostra.identificacao}')
-
+                    self.lista[cont] = projetoR
+                cont += 1
             posicao = self.tree.selection()[0]
             self.tree.delete(posicao)
             self.dados['Projeto'] = self.lista
             self.dados.close()
-            self.root.destroy()
             
 
     def visu(self, lista=None):
@@ -174,10 +163,9 @@ class Amostras:
             if len(projeto.amostras) > 0:
                 for amostra in projeto.amostras:
                     self.list = [self.cont, projeto.nome, amostra.identificacao, projeto.coordenador.nome]
-                    listaAmostras.append(self.list)
                     self.tree.insert("", 'end',values=self.list,  tag='1')
                     self.cont += 1
-                    self.listaAmostras.append([projeto.nome, self.list])
+                    self.listaAmostras.append([projeto, amostra])
         self.dados.close()
 
 

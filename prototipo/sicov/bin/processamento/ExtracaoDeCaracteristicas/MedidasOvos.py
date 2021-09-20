@@ -60,9 +60,6 @@ class MedidasOvos:
             self.listaOvos = []
             largura, altura = img.shape[:2]
 
-            fig, ax = plt.subplots()
-            ax.imshow(img, cmap=plt.cm.gray)
-
             for props in regions:
                 y0, x0 = props.centroid
                 orientation = props.orientation
@@ -81,19 +78,7 @@ class MedidasOvos:
                     print(f'Raio1 = {raio1} | Raio2 = {raio2}')
                     egge = Ovulo(raio1, raio2)
                     self.listaOvos.append(egge)
-                    ax.plot((x0, x1), (y0, y1), '-r', linewidth=2.5)
-                    ax.plot((x0, x2), (y0, y2), '-r', linewidth=2.5)
-                    ax.plot(x0, y0, '.g', markersize=15)
-                    #cv2.line(self.__imagem,(int(x0),int(y0)), (int(x1), int(y1)), (255,255,255),2)
-
-
-                    minr, minc, maxr, maxc = props.bbox
-                    bx = (minc, maxc, maxc, minc, minc)
-                    by = (minr, minr, maxr, maxr, minr)
-                    ax.plot(bx, by, '-b', linewidth=2.5)
-                    ax.plot(bx, by, '-b', linewidth=2.5)
-
-            ax = 0    
+                    
             return self.__imagem, self.listaOvos
         
         def identificarCirculos(self, img):

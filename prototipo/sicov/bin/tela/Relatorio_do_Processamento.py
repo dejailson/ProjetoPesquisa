@@ -15,6 +15,7 @@ class Relatorio():
         self.Processamento = ProDI()
         self.ver = ver
         self.url = url
+        print(self.url)
         
         self.root = t.Tk()
         self.root.resizable(0, 0)
@@ -24,6 +25,7 @@ class Relatorio():
         self.recurso = gr()
         self.root.iconbitmap(self.recurso.carregarIconeJanela())
         imagem = cv2.imread(url)
+        
         imagem, self.listaOvos = self.Processamento.ExtrairCaracteristicas(imagem)
 
         self.camarao = Camarao(amostra.CCT, amostra.CA, amostra.T, self.listaOvos)

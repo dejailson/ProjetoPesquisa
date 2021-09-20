@@ -15,13 +15,18 @@ import shelve
 
 global amostra
 class CadastrarAmostra():
-    def __init__(self, im=None, caminho=None, amostra=None): 
+    def __init__(self, im=None, caminho=None, amostra=None, ver=None):
+        self.ver = ver
+        if self.ver != None:
+            self.paraExcluirCam = caminho 
+            self.paraExcluirAmostra = amostra
         self.identificacaoA =''
         self.numFemeaA = ''
         self.CCTA = ''
         self.CAA = ''
         self.TA = ''
         if amostra != None:
+            self.caminho_img = caminho
             self.identificacaoA = amostra.identificacao
             self.numFemeaA = amostra.numFemeas
             self.CCTA = amostra.CCT
@@ -108,26 +113,50 @@ class CadastrarAmostra():
                                                 CCT=self.cefalotorax.get().strip(),
                                                 CA=self.abdomem.get().strip(),
                                                 T=self.telson.get().strip())
-            amostra = self.amostra
-            try:
+            if self.ver == None:
+                amostra = self.amostra
                 try:
-                    i = cv2.imread(self.caminho_img)
-                    cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS)+'\\'+self.identificacao.get().strip()+'_'+self.recurso.projeto.get().strip()+'.png'
-                    cv2.imwrite(cam, i)
-                    print(cam)
-                    self.cont = 0 
-                    self.dados = shelve.open(BANCO_DADOS)
-                    self.lista = self.dados['Projeto']
-                    for projeto in self.lista:
-                        if projeto.nome == self.amostra.nomeProjeto:
-                            projeto.setAmostra(self.amostra)
-                    self.dados['Projeto'] = self.lista
-                    self.dados.close()
-                    self.mudarTela(var=1)
+                    try:
+                        i = cv2.imread(self.caminho_img)
+                        cam = self.recurso.montarCaminhoImagem(self.identificacao.get().strip()+'_'+self.recurso.projeto.get().strip()+'.png')
+                        cv2.imwrite(cam, i)
+                        self.cont = 0 
+                        self.dados = shelve.open(BANCO_DADOS)
+                        self.lista = self.dados['Projeto']
+                        for projeto in self.lista:
+                            if projeto.nome == self.amostra.nomeProjeto:
+                                projeto.setAmostra(self.amostra)
+                        self.dados['Projeto'] = self.lista
+                        self.dados.close()
+                        self.mudarTela(var=1)
+                    except:
+                        messagebox.showwarning("Atenção!","Escolha uma imagem!")
                 except:
-                    messagebox.showwarning("Atenção!","Escolha uma imagem!")
-            except:
-                messagebox.showwarning("Atenção!","Dados não foram salvos corretamente!")
+                    messagebox.showwarning("Atenção!","Dados não foram salvos corretamente!")
+            else:
+                cont1 = 0
+                cont2= 0
+                self.dados = shelve.open(BANCO_DADOS)
+                self.lista = self.dados['Projeto']
+                i = cv2.imread(self.caminho_img)
+                cam = self.recurso.montarCaminhoImagem(self.identificacao.get().strip()+'_'+self.recurso.projeto.get().strip()+'.png')
+                cv2.imwrite(cam, i)
+                if self.identificacao.get().strip() != self.paraExcluirAmostra.identificacao \
+                    or self.recurso.projeto.get().strip() != self.paraExcluirAmostra.nomeProjeto:
+                    try:
+                        self.recurso.excluirImagem(self.paraExcluirCam)
+                    except FileNotFoundError:
+                        pass
+                for projeto in self.lista:
+                    if projeto.nome == self.paraExcluirAmostra.nomeProjeto:
+                        for amostra in projeto.amostras:
+                            if amostra.identificacao == self.paraExcluirAmostra.identificacao:
+                                self.lista[cont1].amostras[cont2] = self.amostra
+                            cont2 += 1
+                    cont1 += 1
+                self.dados['Projeto'] = self.lista
+                self.dados.close()
+                self.mudarTela(var=2)
         except ValueError:
             messagebox.showwarning('Atenção!', 'Preencha todos os campos!')
 
@@ -149,7 +178,7 @@ class CadastrarAmostra():
 
         self.verificadorCam += 1
 
-    def mudarTela(self, var=None ):
+    def mudarTela(self, var=None):
         try:
             if var != 2:
                 self.amostra = Amostras(nomeProjeto=self.recurso.projeto.get().strip(), 

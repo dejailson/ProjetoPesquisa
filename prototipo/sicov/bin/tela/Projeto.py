@@ -11,7 +11,7 @@ from PIL import ImageTk
 from PIL import Image
 import shelve
 import re
-from config.Parametro import BANCO_DADOS
+from config.Parametro import BANCO_DADOS, SUBPASTA_IMGS_AMOSTRAS
 
 class Projeto():
     def __init__(self):
@@ -143,15 +143,19 @@ class Projeto():
         if self.tree.selection() == ():
             messagebox.showwarning("Erro!","Selecione um Projeto!")
         else:
-            print('qualquer Coisa')
             self.dados = shelve.open(BANCO_DADOS)
             self.lista = self.dados['Projeto']
             posicao = self.tree.selection()[0]
             posicao = self.tree.get_children().index(posicao)
-            print(posicao)
+            projeto = self.lista[posicao]
+            for amostra in projeto.amostras:
+                caminho = self.recurso.montarCaminhoImagem(amostra.identificacao +'_'+ projeto.nome  +'.png')
+                try:
+                    self.recurso.excluirImagem(caminho)
+                except:
+                    pass
             self.lista.remove(self.lista[posicao])
             posicao = self.tree.selection()[0]
-            print(posicao)
             self.tree.delete(posicao)
             self.dados['Projeto'] = self.lista
             self.dados.close()

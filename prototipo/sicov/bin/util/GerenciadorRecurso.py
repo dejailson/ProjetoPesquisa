@@ -1,7 +1,7 @@
 import os
 import config.Parametro as param
 from util.binario import Dados as dd
-from config.Parametro import BANCO_DADOS
+from config.Parametro import BANCO_DADOS, SUBPASTA_IMGS_AMOSTRAS
 import shelve
 from tkinter import ttk
 
@@ -31,6 +31,10 @@ class GerenciadorRecurso:
     def carregarIconeJanela(self):
         imagem_fundo = os.path.join(param.SUBPASTA_ICONE, param.ICONE_JANELA)
         return self.montarCaminhoRecurso(imagem_fundo)
+
+    def montarCaminhoImagem(self, nomeRecurso):
+        imagem = os.path.join(SUBPASTA_IMGS_AMOSTRAS, nomeRecurso)
+        return self.montarCaminhoRecurso(imagem)
 
     def montarCaminhoRecurso(self, nomeRecurso):
         return os.path.join(self.DIRETORIO_RAIZ, param.PASTA_RECURSO,

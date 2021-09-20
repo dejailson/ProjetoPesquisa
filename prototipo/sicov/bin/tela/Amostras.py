@@ -1,6 +1,7 @@
 import tkinter as t
 from tkinter import ttk
 from util.binario import Dados as dd
+import cv2
 from PIL import ImageTk,Image
 from util.Search import Search
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
@@ -62,7 +63,7 @@ class Amostras:
         self.img_lapis = Image.open(self.caminho_lapis)
         self.resu = self.red(self.img_lapis)
         self.imagem_lapis = ImageTk.PhotoImage(self.resu)
-        self.imagem_lapis_L = t.Button(image=self.imagem_lapis).place(x=570, y=315)
+        self.imagem_lapis_L = t.Button(image=self.imagem_lapis, command=lambda: self.editar()).place(x=570, y=315)
 
         self.caminho_olhos = self.recurso.carregarIconeOlho()
         self.img_olhos = Image.open(self.caminho_olhos)
@@ -98,27 +99,37 @@ class Amostras:
         imge = imge.resize((self.basewidth,self.hsize), Image.ANTIALIAS)
         return imge
 
-    def viewAmostra(self):
-        if self.tree.selection() == ():
-            messagebox.showerror("Erro","Selecione uma Amostra!")
-        else:
-            self.dados = shelve.open(BANCO_DADOS)
-            self.lista = self.dados['Projeto']
-            posicao = self.tree.selection()[0]
-            posicao = self.tree.get_children().index(posicao)
-            amostraR = self.listaAmostras[posicao][1]
-            projetoR = self.listaAmostras[posicao][0]
-            print(projetoR.nome)
-            try:
-                self.cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS+'\\'+ amostraR.identificacao +'_'+ projetoR.nome +'.png')
-                from tela.Relatorio_do_Processamento import Relatorio as rel
-                self.root.destroy()
-                rel(url=self.cam, amostra=amostraR, ver=None)
-            except FileNotFoundError:
-                messagebox.showerror("Erro!","A imagem da Amostra não se encontra mais salva no sistema de arquivo.")
-            self.dados.close()
+    def editar(self):
+        amostraR, projetoR, self.cam = self.carregarInformacoes()
+        var = 0
+        try:
+            i = cv2.imread(self.cam)
+            i = cv2.cvtColor(i, cv2.COLOR_BGR2GRAY)
+            var = 1
+        except:
+            messagebox.showwarning("Erro!","Imagem não encontrada!")
+            var = 2
+        if var == 1:
+            self.root.destroy()
+            CA(im=self.cam, caminho=self.cam, amostra=amostraR, ver=1)
 
-    def remover(self):
+    def viewAmostra(self):
+        amostraR, projetoR, self.cam = self.carregarInformacoes()
+        var = 0
+        try:
+            i = cv2.imread(self.cam)
+            i = cv2.cvtColor(i, cv2.COLOR_BGR2GRAY)
+            var = 1
+        except:
+            messagebox.showwarning("Erro!","Imagem não encontrada!")
+            var = 2
+        if var == 1:
+            from tela.Relatorio_do_Processamento import Relatorio as rel
+            self.root.destroy()
+            rel = rel(url=self.cam, amostra=amostraR, ver=1)
+   
+
+    def carregarInformacoes(self):
         if self.tree.selection() == ():
             messagebox.showwarning("Atenção!","Selecione uma Amostra!")
         else:
@@ -128,24 +139,34 @@ class Amostras:
             posicao = self.tree.get_children().index(posicao)
             amostraR = self.listaAmostras[posicao][1]
             projetoR = self.listaAmostras[posicao][0]
-            projetoR = Search(projeto=[projetoR.nome, '', ''])[0]
             try:
-                self.cam = self.recurso.montarCaminhoRecurso(SUBPASTA_IMGS_AMOSTRAS+'\\'+ amostraR.identificacao +'_'+ projetoR.nome  +'.png')
-            except FileNotFoundError:
-                pass
-            for amostra in projetoR.amostras:
-                print(f'1 - {amostra.identificacao}')
-                if amostra.identificacao == amostraR.identificacao:
-                    projetoR.amostras.remove(amostra)
-            cont = 0
-            for projeto in self.lista:
-                if projeto.nome == projetoR.nome:
-                    self.lista[cont] = projetoR
-                cont += 1
-            posicao = self.tree.selection()[0]
-            self.tree.delete(posicao)
-            self.dados['Projeto'] = self.lista
-            self.dados.close()
+                self.cam = self.recurso.montarCaminhoImagem(amostraR.identificacao +'_'+ projetoR.nome  +'.png')
+            except:
+                messagebox.showwarning("Erro!","Imagem não encontrada!")
+        return amostraR, projetoR, self.cam
+
+
+    def remover(self):
+        self.dados = shelve.open(BANCO_DADOS)
+        self.lista = self.dados['Projeto']
+        amostraR, projetoR, self.cam = self.carregarInformacoes()
+        for amostra in projetoR.amostras:
+            if amostra.identificacao == amostraR.identificacao:
+                caminho = self.recurso.montarCaminhoImagem(amostra.identificacao +'_'+ projetoR.nome  +'.png')
+                try:
+                    self.recurso.excluirImagem(caminho)
+                except:
+                    pass
+                projetoR.amostras.remove(amostra)
+        cont = 0
+        for projeto in self.lista:
+            if projeto.nome == projetoR.nome:
+                self.lista[cont] = projetoR
+            cont += 1
+        posicao = self.tree.selection()[0]
+        self.tree.delete(posicao)
+        self.dados['Projeto'] = self.lista
+        self.dados.close()
             
 
     def visu(self, lista=None):

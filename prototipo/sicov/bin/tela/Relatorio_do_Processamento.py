@@ -15,7 +15,6 @@ class Relatorio():
         self.Processamento = ProDI()
         self.ver = ver
         self.url = url
-        print(self.url)
         
         self.root = t.Tk()
         self.root.resizable(0, 0)

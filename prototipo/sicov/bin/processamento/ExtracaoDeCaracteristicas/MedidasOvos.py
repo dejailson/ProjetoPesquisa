@@ -59,7 +59,6 @@ class MedidasOvos:
             regions = regionprops(label_img)
             self.listaOvos = []
             largura, altura = img.shape[:2]
-
             for props in regions:
                 y0, x0 = props.centroid
                 orientation = props.orientation
@@ -69,16 +68,21 @@ class MedidasOvos:
                 y2 = y0 - math.cos(orientation) * 0.5 * props.major_axis_length
                 raio1 = self.tamanho(x0, x1, y0, y1)
                 raio2 = self.tamanho(x0, x2, y0, y2)
-                if raio1 >= 5 and raio1 <= 25 and raio2 >= 5 and raio2 <= 25:
+                espera1 = raio1
+                espera2 = raio2
+                if raio2 > raio1:
+                    raio2 = espera1
+                    raio1 = espera2
+                if raio1 >= 5 and raio1 <= 30 and raio2 >= 5 and raio2 <= 25:
                     listaR = self.recurso.getObjetoPadrao()
-                    alturaReal = listaR[1]
+                    alturaRealA = listaR[1]
+                    alturaRealB = listaR[0]
                     alturaPixel = self.ListaCoordenadas[2]*2
-                    raio1 = (alturaReal * raio1) / alturaPixel
-                    raio2 = (alturaReal * raio2) / alturaPixel
+                    raio1 = (alturaRealA * raio1) / alturaPixel
+                    raio2 = (alturaRealB * raio2) / alturaPixel
                     print(f'Raio1 = {raio1} | Raio2 = {raio2}')
                     egge = Ovulo(raio1, raio2)
-                    self.listaOvos.append(egge)
-                    
+                    self.listaOvos.append(egge)      
             return self.__imagem, self.listaOvos
         
         def identificarCirculos(self, img):

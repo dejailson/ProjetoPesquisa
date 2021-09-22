@@ -31,7 +31,10 @@ class AplicarMascara:
         except:
             for i in self.detectarCirculos(img, 1)[0, :]:
                 cv2.circle(mask, (i[0], i[1]), i[2], (255, 0, 0), -1)
-        return self.obtendoMascaras(img, mask)
+        try:
+            return self.obtendoMascaras(img, mask)
+        except:
+            return img
 
 
     # get first masked value (foreground)

@@ -22,7 +22,10 @@ class Relatorio():
         self.root.title('Relatório do Processamento')
         self.recurso = gr()
         self.recurso = gr()
-        self.root.iconbitmap(self.recurso.carregarIconeJanela())
+        try:
+            self.root.iconbitmap(self.recurso.carregarIconeJanela())
+        except:
+            pass
         imagem = cv2.imread(url)
         
         imagem, self.listaOvos = self.Processamento.ExtrairCaracteristicas(imagem)

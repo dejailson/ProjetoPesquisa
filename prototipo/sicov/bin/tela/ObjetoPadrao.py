@@ -10,7 +10,10 @@ class ObjetoPadrao:
             self.dimensaoObj = ['', '']
         self.tela = t.Tk()
         self.tela.resizable(0, 0)
-        self.tela.iconbitmap(self.recurso.carregarIconeJanela())
+        try:
+            self.tela.iconbitmap(self.recurso.carregarIconeJanela())
+        except:
+            pass
         self.tela.geometry("400x300")
         self.tela.title('Dimensões do Objeto')
 

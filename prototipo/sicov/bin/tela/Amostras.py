@@ -20,7 +20,10 @@ class Amostras:
         self.root = t.Tk()
         self.binario = dd()
         self.recurso = gr()
-        self.root.iconbitmap(self.recurso.carregarIconeJanela())
+        try:
+            self.root.iconbitmap(self.recurso.carregarIconeJanela())
+        except:
+            pass
         self.root.resizable(0, 0) 
         self.root.geometry("700x500")
         self.w1 = t.LabelFrame(self.root)
@@ -42,7 +45,7 @@ class Amostras:
         self.recurso.monstarListaProjetos(root=self.root, tela='Amostra')
         self.botao_pesquisar = t.Button(self.root, text=' Pesquisar ', font=param.FONTE_PADRAO, comman= lambda: self.search()).place(x=570, y=149)#sem ação
 
-        self.botao_adicionar = t.Button(self.root, text='+ Incluir Novo', font=param.FONTE_OUTRA[1], command=lambda:self.mudarTela())
+        self.botao_adicionar = t.Button(self.root, text='Cadastrar Amostra', font=param.FONTE_OUTRA[1], command=lambda:self.mudarTela())
         self.botao_adicionar.place(x=580, y=265)
 
         self.tree = ttk.Treeview(self.root, selectmode="browse", column=("coluna1", "coluna2", "coluna3", "coluna4"), show="headings")
@@ -196,9 +199,14 @@ class Amostras:
             from tela.TelaPrincipal import TelaPrincipal
             TelaPrincipal()
         else:
-            #messagebox.showerror
-            self.root.destroy()
-            CA()
+            self.dados = shelve.open(BANCO_DADOS)
+            self.lista = self.dados['Projeto']
+            if len(self.lista) > 0:
+                self.root.destroy()
+                CA()
+            else:
+                messagebox.showwarning("Atenção!","Cadastre um Projeto antes de cadastrar uma amostra.")
+            self.dados.close()
 
 
 

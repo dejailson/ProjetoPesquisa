@@ -13,7 +13,10 @@ class TelaPrincipal():
         self.root.configure(bg='white')
         self.binario = dd()
         self.recurso = gr()
-        self.root.iconbitmap(self.recurso.carregarIconeJanela())
+        try:
+            self.root.iconbitmap(self.recurso.carregarIconeJanela())
+        except:
+            pass
         self.root.geometry('800x500')
         self.root.title('SisCov')
         self.root.resizable(0, 0) 

@@ -36,7 +36,10 @@ class CadastrarAmostra():
         self.dados_membros = []
         self.root = t.Tk()
         self.recurso = gr()
-        self.root.iconbitmap(self.recurso.carregarIconeJanela())
+        try:
+            self.root.iconbitmap(self.recurso.carregarIconeJanela())
+        except:
+            pass
         self.root.geometry("1000x410")
         self.root.resizable(0, 0) 
         self.root.title('Cadastro da Amostra')
@@ -72,21 +75,21 @@ class CadastrarAmostra():
         self.NFemea.insert(0, self.numFemeaA)
         self.NFemea.place(x=630, y=120, height=20, relwidth=0.32, relheight=0.01)
 
-        self.msg5 = t.Label(self.root, text='Comprimento do Cefalotórax', font='arial 12 bold')
+        self.msg5 = t.Label(self.root, text='Comprimento do Cefalotórax (cm)', font='arial 11 bold')
         self.msg5.place(x=380, y=160)
 
         self.cefalotorax = t.Entry(self.root, width=52, bord=2)
         self.cefalotorax.insert(0, self.CCTA)
         self.cefalotorax.place(x=630, y=160, height=20)
 
-        self.msg6 = t.Label(self.root, text='Comprimento do Abdome', font='arial 12 bold')
+        self.msg6 = t.Label(self.root, text='Comprimento do Abdome (cm)', font='arial 12 bold')
         self.msg6.place(x=380, y=200)
 
         self.abdomem = t.Entry(self.root, width=52, bord=2)
         self.abdomem.insert(0, self.CAA)
         self.abdomem.place(x=630, y=200, height=20)
 
-        self.msg7 = t.Label(self.root, text='Comprimento do Telson', font='arial 12 bold')
+        self.msg7 = t.Label(self.root, text='Comprimento do Telson (cm)', font='arial 12 bold')
         self.msg7.place(x=380, y=240)
 
         self.telson = t.Entry(self.root, width=52, bord=2)
@@ -179,31 +182,36 @@ class CadastrarAmostra():
         self.verificadorCam += 1
 
     def mudarTela(self, var=None):
-        try:
-            if var != 2:
-                self.amostra = Amostras(nomeProjeto=self.recurso.projeto.get().strip(), 
-                                                    identificacao=self.identificacao.get().strip(), 
-                                                    numFemeas=self.NFemea.get().strip(),
-                                                    CCT=self.cefalotorax.get().strip(),
-                                                    CA=self.abdomem.get().strip(),
-                                                    T=self.telson.get().strip())
-            from tela.Amostras import Amostras as tela_amostras
-            if var == 1 or var == 2:
-                self.root.destroy()
-                tela_amostras()
+        self.dados = shelve.open(BANCO_DADOS)
+        self.lista = self.dados['Objeto']
+        if len(self.lista) > 0:
+            try:
+                if var != 2:
+                    self.amostra = Amostras(nomeProjeto=self.recurso.projeto.get().strip(), 
+                                                        identificacao=self.identificacao.get().strip(), 
+                                                        numFemeas=self.NFemea.get().strip(),
+                                                        CCT=self.cefalotorax.get().strip(),
+                                                        CA=self.abdomem.get().strip(),
+                                                        T=self.telson.get().strip())
+                from tela.Amostras import Amostras as tela_amostras
+                if var == 1 or var == 2:
+                    self.root.destroy()
+                    tela_amostras()
 
-            else:
-                try:
-                    if self.caminho_img != None:
-                        self.root.destroy()
-                        rel(url=self.caminho_img, amostra=self.amostra)
-                        
-                    else:
-                        messagebox.showwarning("Atenção!","Escolha uma imagem!")
+                else:
+                    try:
+                        if self.caminho_img != None:
+                            self.root.destroy()
+                            rel(url=self.caminho_img, amostra=self.amostra)
                             
-                except AttributeError:
-                    messagebox.showwarning("Atenção!","Escolha uma imagem!")
-        except ValueError:
-            messagebox.showwarning('Atenção!', 'Preencha todos os campos corretamente!')
+                        else:
+                            messagebox.showwarning("Atenção!","Escolha uma imagem!")
+                                
+                    except AttributeError:
+                        messagebox.showwarning("Atenção!","Escolha uma imagem!")
+            except ValueError:
+                messagebox.showwarning('Atenção!', 'Preencha todos os campos corretamente!')
+        else:
+            messagebox.showwarning('Atenção!', 'Informe as dimenções do objeto padrão.')
 
     

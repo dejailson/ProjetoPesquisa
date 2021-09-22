@@ -38,7 +38,10 @@ class cadastrarProjeto:
             for c in projeto.pesquisadores:
                 self.dados_membros.append(c)
         self.root = t.Tk()
-        self.root.iconbitmap(self.recurso.carregarIconeJanela())
+        try:
+            self.root.iconbitmap(self.recurso.carregarIconeJanela())
+        except:
+            pass
         self.root.resizable(0, 0)
         self.root.geometry("700x500")
         self.w1 = t.LabelFrame(self.root)
@@ -83,11 +86,11 @@ class cadastrarProjeto:
         self.tree = ttk.Treeview(self.root, selectmode="browse", 
                                 column=("coluna1", "coluna2", "coluna3", "coluna4"), 
                                 show="headings")
-        self.tree.column("coluna1", width=50, minwidth=50)
+        self.tree.column("coluna1", width=100, minwidth=50)
         self.tree.heading('#1', text='Matrícula')
         self.tree.column("coluna2", width=150, minwidth=50)
         self.tree.heading('#2', text='Pesquisador')
-        self.tree.column("coluna3", width=150, minwidth=50)
+        self.tree.column("coluna3", width=50, minwidth=50)
         self.tree.heading('#3', text='Membro')
         self.tree.column("coluna4", width=100, minwidth=50)
         self.tree.heading('#4', text='Coordenador')
@@ -134,7 +137,10 @@ class cadastrarProjeto:
             lista = [self.dados_membros[int(posicao[-1])-1].matricula, self.dados_membros[int(posicao[-1])-1].nome]
         self.tela = t.Tk()
         self.tela.resizable(0, 0)
-        self.tela.iconbitmap(self.recurso.carregarIconeJanela())
+        try:
+            self.tela.iconbitmap(self.recurso.carregarIconeJanela())
+        except:
+            pass
         self.tela.geometry("400x300")
         self.tela.title('Cadastrar Participante')
 

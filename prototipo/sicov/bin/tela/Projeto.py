@@ -18,7 +18,10 @@ class Projeto():
         self.recurso = gr()
 
         self.pro = t.Tk()
-        self.pro.iconbitmap(self.recurso.carregarIconeJanela())
+        try:
+            self.pro.iconbitmap(self.recurso.carregarIconeJanela())
+        except:
+            pass
         self.pro.geometry("700x500")
         self.pro.resizable(0, 0) 
         self.w1 = t.LabelFrame(self.pro)
@@ -46,18 +49,18 @@ class Projeto():
 
         self.botao_pesquisar = t.Button(self.pro, text=' Pesquisar ', font=param.FONTE_PADRAO, command=lambda: self.search())
         self.botao_pesquisar.place(x=540, y=150)#sem ação
-        self.botao_adicionar = t.Button(self.pro, text='+ Incluir Novo', font=param.FONTE_OUTRA[1],  
+        self.botao_adicionar = t.Button(self.pro, text='Cadastrar Projeto', font=param.FONTE_OUTRA[1],  
                                         command=lambda : self.mudarTela())
         self.botao_adicionar.place(x=580, y=265)
         
         self.tree = ttk.Treeview(self.pro, selectmode="browse", 
                                 column=("coluna1", "coluna2", "coluna3", "coluna4"),
                                 show="headings")
-        self.tree.column("coluna1", width=50, minwidth=50)
+        self.tree.column("coluna1", width=100, minwidth=50)
         self.tree.heading('#1', text=' ')
         self.tree.column("coluna2", width=150, minwidth=50)
         self.tree.heading('#2', text='Projeto')
-        self.tree.column("coluna3", width=150, minwidth=50)
+        self.tree.column("coluna3", width=50, minwidth=50)
         self.tree.heading('#3', text='Data')
         self.tree.column("coluna4", width=100, minwidth=50)
         self.tree.heading('#4', text='Coordenador')

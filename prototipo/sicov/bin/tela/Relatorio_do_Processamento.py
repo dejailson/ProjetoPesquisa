@@ -1,5 +1,6 @@
 import tkinter as t
 from tkinter import ttk
+from tkinter import messagebox
 from util.binario import Dados as dd
 from PIL import Image, ImageTk
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
@@ -8,10 +9,12 @@ from processamento.aquisicao_img import Aquisicao
 from util.modelo.amostras import Amostras
 from util.GerenciadorRecurso import GerenciadorRecurso as gr
 from util.modelo.camarao import Camarao
+from util.savePdf import SalvarPDF
 import numpy as np
 import cv2
 class Relatorio():
     def __init__(self, url, amostra, ver=None):
+        self.amostra = amostra
         self.Processamento = ProDI()
         self.ver = ver
         self.url = url
@@ -106,8 +109,12 @@ class Relatorio():
         self.VMassaOvos.place(x=650, y=280, height=20,
                               relwidth=0.32, relheight=0.01)
 
+        self.VisuRelat = t.Button(self.root, text='Visualizar Relatório', command=lambda: self.salvarPDF())
+        self.VisuRelat.place(x=740, y=400, width=100, relwidth=0.01)
+
+
         self.sair = t.Button(self.root, text='Sair', command=lambda: self.voltar()).place(
-            x=860, y=400, width=100, relwidth=0.01)  # sem ação
+            x=860, y=400, width=100, relwidth=0.01)
 
         self.root.mainloop()
 
@@ -119,6 +126,12 @@ class Relatorio():
         else:
             from tela.Amostras import Amostras as tela_amostras
             tela_amostras()
+
+    def salvarPDF(self):
+        nome = SalvarPDF(amostra=self.amostra, camarao=self.camarao, listaOvos=self.listaOvos)
+        nome = nome.salvar()
+        messagebox.showinfo(f'{nome}!', f'O PDF com os dados da amostra {nome}, foram salvos com sucesso')
+
 
 
 

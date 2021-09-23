@@ -1,7 +1,7 @@
 import os
 import config.Parametro as param
 from util.binario import Dados as dd
-from config.Parametro import BANCO_DADOS, SUBPASTA_IMGS_AMOSTRAS
+from config.Parametro import BANCO_DADOS, SUBPASTA_IMGS_AMOSTRAS, SUBPASTA_PDF
 import shelve
 from tkinter import ttk
 
@@ -35,6 +35,10 @@ class GerenciadorRecurso:
     def montarCaminhoImagem(self, nomeRecurso):
         imagem = os.path.join(SUBPASTA_IMGS_AMOSTRAS, nomeRecurso)
         return self.montarCaminhoRecurso(imagem)
+
+    def montarCaminhoPDF(self, nomeRecurso):
+        return os.path.join(self.DIRETORIO_RAIZ, param.PASTA_RECURSO,
+                            param.SUBPASTA_PDF, nomeRecurso)
 
     def montarCaminhoRecurso(self, nomeRecurso):
         return os.path.join(self.DIRETORIO_RAIZ, param.PASTA_RECURSO,

@@ -98,14 +98,11 @@ class CadastrarAmostra():
 
 
         self.Processar = t.Button(self.root, text=' Processar ', command=lambda:self.mudarTela())
-        self.Processar.place(x=500, y=320, width=100, relwidth=0.01)
+        self.Processar.place(x=620, y=320, width=100, relwidth=0.01)
         self.Salvar = t.Button(self.root, text=' Salvar ', command=lambda:self.adicionar())
-        self.Salvar.place(x=620, y=320, width=100, relwidth=0.01)
+        self.Salvar.place(x=740, y=320, width=100, relwidth=0.01)
         self.Cancelar = t.Button(self.root, text=' Cancelar ', command=lambda:self.mudarTela(var=2))
-        self.Cancelar.place(x=740, y=320, width=100, relwidth=0.01)
-        self.VisuRelat = t.Button(self.root, text='Visualizar Relatório', command=None)#sem ação
-        self.VisuRelat.place(x=860, y=320, width=100, relwidth=0.01)
-
+        self.Cancelar.place(x=860, y=320, width=100, relwidth=0.01)
         self.root.mainloop()
 
     def adicionar(self):

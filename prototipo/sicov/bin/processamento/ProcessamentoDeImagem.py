@@ -6,6 +6,7 @@ from .ExtracaoDeCaracteristicas.MedidasOvos import MedidasOvos as MO
 from .ExtracaoDeCaracteristicas.mask import AplicarMascara as AM
 from PIL import Image
 import cv2
+import time
 class ProcessamentoDeImagem:
     def __init__(self):
         self.PDI = PDI()
@@ -23,6 +24,7 @@ class ProcessamentoDeImagem:
         #return self.PDI.porRealce(imagem=imagem).realcarBordaPorCanny(50, 100).realcarBordaPorFiltroRealce(3, 50, (3, 3)).executar()
 
     def ExtrairCaracteristicas(self, imagem):
+        tempo_inicial = time.time()
         self.imge = Image.fromarray(imagem)
         self.basewidth = 400
         self.wpercent = (self.basewidth/float(self.imge.size[0]))
@@ -30,4 +32,5 @@ class ProcessamentoDeImagem:
         imagem = self.imge.resize((self.basewidth,self.hsize), Image.ANTIALIAS)
         imagem = np.array(imagem)
         i, lista = self.Medidas.PorScikitECv2(self.PreProcessamento(imagem=imagem)).cobrirCirculos() 
-        return i, lista
+        tempo = time.time() - tempo_inicial
+        return i, lista, tempo

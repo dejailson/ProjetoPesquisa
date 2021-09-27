@@ -30,8 +30,21 @@ class Relatorio():
         except:
             pass
         imagem = cv2.imread(url)
-        
-        imagem, self.listaOvos = self.Processamento.ExtrairCaracteristicas(imagem)
+        try:
+            imagem, self.listaOvos, tempo = self.Processamento.ExtrairCaracteristicas(imagem)
+        except TypeError:
+            self.root.destroy()
+            from tela.cadastrarAmostra import CadastrarAmostra as CA 
+            CA(im=self.url, caminho=self.url, amostra=self.amostra, erro='erro')
+
+        self.tempo = str(tempo)
+        try:
+            self.tempo = self.tempo[:4]
+        except:
+            self.tempo = self.tempo[:3]
+
+        self.tempo = self.tempo.split('.')
+        self.tempo = self.tempo[0]+' segudos e '+self.tempo[1]+' milissegundos'
 
         self.camarao = Camarao(amostra.CCT, amostra.CA, amostra.T, self.listaOvos)
         self.mediaMassaOvos, self.volumeMassaOvos = self.camarao.volumeDaMassaDosOvos()
@@ -109,7 +122,7 @@ class Relatorio():
         self.VMassaOvos.place(x=650, y=280, height=20,
                               relwidth=0.32, relheight=0.01)
 
-        self.VisuRelat = t.Button(self.root, text='Visualizar Relatório', command=lambda: self.salvarPDF())
+        self.VisuRelat = t.Button(self.root, text='Salvar em PDF', command=lambda: self.salvarPDF())
         self.VisuRelat.place(x=740, y=400, width=100, relwidth=0.01)
 
 
@@ -137,10 +150,12 @@ class Relatorio():
 
     def estagios(self):
         # Definir função para o processamento de imagem
-        self.part1 = t.Label(self.root, text='Circulo Externo - Circurferencia do Ovo',
+        self.part1 = t.Label(self.root, text='Circulo Externo - Circurferência do Ovo',
                              font='Arial 9 bold').place(x=12, y=390)
         self.part2 = t.Label(self.root, text='Circulo Interno - Centroide',
                              font='Arial 9 bold').place(x=12, y=410)
+        self.part3 = t.Label(self.root, text=f'Tempo de Execução do Programa:  {self.tempo}',
+                             font='Arial 9 bold').place(x=12, y=430)
         
 
 

@@ -23,7 +23,7 @@ class SalvarPDF:
 
     def salvar(self):
         cnv = canvas.Canvas(self.caminho)
-        cnv.drawString(250,750,"Relatório da amostra "+ self.nome)
+        cnv.drawString(210,750,"Relatório da amostra "+ self.nome)
         
         cnv.drawString(80,700,"Média da Massa dos Ovos")
         cnv.drawString(100,685,self.mediaMassaOvos+"mm³")
@@ -35,33 +35,25 @@ class SalvarPDF:
         cnv.drawString(400,700,"Média de Fecundidade")
         cnv.drawString(400,685,self.MediaFecundidade+" ovo/tamanho")
 
-        cnv.drawString(250,670,"Total de Ovos")
-        cnv.drawString(250,655,str(len(self.listaOvos)))
+        cnv.drawString(230,670,"Total de Ovos")
+        cnv.drawString(270,655,str(len(self.listaOvos)))
 
         cnv.drawString(80,635,"Diametro Maior")
-        coordenadarInicial = 620
-        cont = 0
-        for egge in self.listaOvos:
-            cnv.drawString(80,(coordenadarInicial-cont),str(egge.diametroMaior)+"mm³")
-            cont += 15
-
-        
-
-
         cnv.drawString(230,635,"Diametro Menor")
-        coordenadarInicial = 620
-        cont = 0
-        for egge in self.listaOvos:
-            cnv.drawString(230,(coordenadarInicial-cont),str(egge.diametroMenor)+"mm³")
-            cont += 15
-        
-
-
         cnv.drawString(380,635,"Volume do Ovo")
         coordenadarInicial = 620
         cont = 0
+        verificador = 0
         for egge in self.listaOvos:
-            cnv.drawString(380,(coordenadarInicial-cont),str(egge.calcularVolume())+'mm³')
+            cnv.drawString(80,(coordenadarInicial-cont),str(egge.diametroMaior)[:4]+"mm³")
+            cnv.drawString(230,(coordenadarInicial-cont),str(egge.diametroMenor)[:4]+"mm³")
+            cnv.drawString(380,(coordenadarInicial-cont),str(egge.calcularVolume())[:4]+'mm³')
             cont += 15
+            verificador += 1
+            if verificador == 36:
+                cont = 0
+                verificador = 0
+                coordenadarInicial = 750
+                cnv.showPage()
         cnv.save()
         return self.nome

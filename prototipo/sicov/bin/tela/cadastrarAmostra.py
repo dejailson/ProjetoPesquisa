@@ -15,7 +15,7 @@ import shelve
 
 global amostra
 class CadastrarAmostra():
-    def __init__(self, im=None, caminho=None, amostra=None, ver=None):
+    def __init__(self, im=None, caminho=None, amostra=None, ver=None, erro=None):
         self.ver = ver
         if self.ver != None:
             self.paraExcluirCam = caminho 
@@ -52,7 +52,7 @@ class CadastrarAmostra():
         self.imagem = dd()
         if im != None:
             self.procurarB(num=im, url=caminho)
-        self.procurar = t.Button(self.root, text='Procurar', command=lambda:self.procurarB()).place(x=12, y=360, width=350)
+        self.procurar = t.Button(self.root, text='Procurar Imagem', command=lambda:self.procurarB()).place(x=12, y=360, width=350)
         self.url = caminho
 
 
@@ -103,6 +103,8 @@ class CadastrarAmostra():
         self.Salvar.place(x=740, y=320, width=100, relwidth=0.01)
         self.Cancelar = t.Button(self.root, text=' Cancelar ', command=lambda:self.mudarTela(var=2))
         self.Cancelar.place(x=860, y=320, width=100, relwidth=0.01)
+        if erro == 'erro':
+            messagebox.showerror('Erro!', 'A seguinte imagem não pode ser processada. verifique a claridade e qualidade da imagem!')
         self.root.mainloop()
 
     def adicionar(self):
@@ -200,6 +202,7 @@ class CadastrarAmostra():
                         if self.caminho_img != None:
                             self.root.destroy()
                             rel(url=self.caminho_img, amostra=self.amostra)
+
                             
                         else:
                             messagebox.showwarning("Atenção!","Escolha uma imagem!")

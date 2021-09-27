@@ -37,7 +37,7 @@ class Amostras:
         self.msg1.place(x=30, y=0)
         self.msg2 = t.Label(self.root, text='Identificação', font=param.FONTE_OUTRA[3])
         self.msg2.place(x=12, y=50)
-        self.Identificacao = t.Entry(self.root, width=65, bord=2)
+        self.Identificacao = t.Entry(self.root, width=60, bord=2)
         self.Identificacao.place(x=160, y=55, height=30)
 
         self.msg3 = t.Label(self.root, text='Projeto', font=param.FONTE_OUTRA[2])
@@ -46,7 +46,7 @@ class Amostras:
         self.botao_pesquisar = t.Button(self.root, text=' Pesquisar ', font=param.FONTE_PADRAO, comman= lambda: self.search()).place(x=570, y=149)#sem ação
 
         self.botao_adicionar = t.Button(self.root, text='Cadastrar Amostra', font=param.FONTE_OUTRA[1], command=lambda:self.mudarTela())
-        self.botao_adicionar.place(x=580, y=265)
+        self.botao_adicionar.place(x=555, y=265)
 
         self.tree = ttk.Treeview(self.root, selectmode="browse", column=("coluna1", "coluna2", "coluna3", "coluna4"), show="headings")
         self.tree.column("coluna1", width=50, minwidth=50)

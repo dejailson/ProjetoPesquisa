@@ -73,7 +73,7 @@ class MedidasOvos:
                 if raio2 > raio1:
                     raio2 = espera1
                     raio1 = espera2
-                if raio1 >= 5 and raio1 <= 30 and raio2 >= 5 and raio2 <= 25:
+                if raio1 >= 3 and raio1 <= 35 and raio2 >= 3 and raio2 <= 35:
                     listaR = self.recurso.getObjetoPadrao()
                     alturaRealA = listaR[1]
                     alturaRealB = listaR[0]

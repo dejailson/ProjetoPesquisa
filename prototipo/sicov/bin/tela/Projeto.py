@@ -34,7 +34,7 @@ class Projeto():
         self.msg1.place(x=30, y=0)
         self.msg2 = t.Label(self.pro, text='Nome   ', font=param.FONTE_OUTRA[3])
         self.msg2.place(x=12, y=50)
-        self.Nome = t.Entry(self.pro, width=50, bord=2)
+        self.Nome = t.Entry(self.pro, width=40, bord=2)
         self.Nome.place(x=160, y=55, height=30)
         self.msg3 = t.Label(self.pro, text='Data', font=param.FONTE_OUTRA[3])
         self.msg3.place(x=465, y=55)
@@ -44,14 +44,14 @@ class Projeto():
         #self.Data.place(x=520, y=55, height=30)
         self.msg4 = t.Label(self.pro, text='Coordenador     ', font=param.FONTE_OUTRA[2])
         self.msg4.place(x=12, y=150)
-        self.coordenador = t.Entry(self.pro, width=50, bord=2)
+        self.coordenador = t.Entry(self.pro, width=40, bord=2)
         self.coordenador.place(x=160, y=150, height=30)
 
         self.botao_pesquisar = t.Button(self.pro, text=' Pesquisar ', font=param.FONTE_PADRAO, command=lambda: self.search())
         self.botao_pesquisar.place(x=540, y=150)#sem ação
         self.botao_adicionar = t.Button(self.pro, text='Cadastrar Projeto', font=param.FONTE_OUTRA[1],  
                                         command=lambda : self.mudarTela())
-        self.botao_adicionar.place(x=580, y=265)
+        self.botao_adicionar.place(x=560, y=265)
         
         self.tree = ttk.Treeview(self.pro, selectmode="browse", 
                                 column=("coluna1", "coluna2", "coluna3", "coluna4"),
